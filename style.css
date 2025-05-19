@@ -4,122 +4,99 @@
   box-sizing: border-box;
 }
 
-body, html {
+body {
   margin: 0;
-  height: 100%;
-  background: radial-gradient(ellipse at bottom, #0a0a0a, #000000);
-  font-family: 'Orbitron', sans-serif;
-  color: #fff;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  user-select: none;
-}
-
-.stars-bg {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
   height: 100vh;
-  background: url('https://raw.githubusercontent.com/JulianGarnier/particles.js/master/demo/media/stars.png') repeat;
-  background-size: 200px 200px;
-  opacity: 0.1;
-  animation: moveStars 60s linear infinite;
-  z-index: -1;
-}
-
-@keyframes moveStars {
-  0% { background-position: 0 0; }
-  100% { background-position: 1000px 1000px; }
-}
-
-.menu-container {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
-  position: relative;
-}
-
-.block-group {
-  display: flex;
-  gap: 60px;
-}
-
-.block {
-  position: relative;
+  background: linear-gradient(135deg, #050021 0%, #1f003d 100%);
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #ddd;
-  cursor: pointer;
-  border-radius: 16px;
-  padding: 1.6rem 2.8rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 3px;
-  user-select: none;
-  background: linear-gradient(145deg, #3a0f44, #1b0226);
-  box-shadow:
-    0 0 15px #8e44adaa,
-    inset 0 0 10px #e91e63cc;
-  transition: transform 0.35s ease, box-shadow 0.35s ease, color 0.35s ease;
-  animation: floatBounce 3s ease-in-out infinite;
-  min-width: 130px;
-  min-height: 130px;
-  font-size: 1.25rem;
-  text-align: center;
-  perspective: 1000px;
-}
-
-.block.big {
-  min-width: 220px;
-  min-height: 220px;
-  font-size: 1.75rem;
-  border-radius: 32px;
-  font-weight: 800;
-  letter-spacing: 5px;
-  box-shadow:
-    0 0 25px #d6009a,
-    inset 0 0 15px #f81ab0;
-  animation-duration: 3.5s;
-}
-
-.block.block-edge {
-  min-width: 140px;
-  min-height: 140px;
-  font-size: 1.3rem;
-  border-radius: 24px;
-  box-shadow:
-    0 0 20px #721575aa,
-    inset 0 0 10px #d9007dcc;
-  animation-duration: 2.5s;
-}
-
-.block.block-edge.left {
-  transform-origin: left center;
-}
-
-.block.block-edge.right {
-  transform-origin: right center;
-}
-
-.block:hover {
-  transform: translateY(-20px) rotateX(10deg) rotateY(15deg) scale(1.1);
-  box-shadow:
-    0 0 50px #ff3ab6,
-    inset 0 0 30px #ff7aff;
+  font-family: 'Orbitron', sans-serif;
+  overflow: hidden;
   color: #fff;
-  transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
-  z-index: 2;
 }
 
-/* Bouncing animation */
-@keyframes floatBounce {
-  0%, 100% {
-    transform: translateY(0) rotateX(0) rotateY(0);
-  }
-  50% {
-    transform: translateY(-20px) rotateX(5deg) rotateY(7deg);
-  }
+.menu-wrapper {
+  display: flex;
+  align-items: center;
+  width: 80vw;
+  max-width: 900px;
+  position: relative;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: #ff4fff;
+  font-size: 3rem;
+  cursor: pointer;
+  user-select: none;
+  padding: 0 1rem;
+  transition: color 0.3s ease;
+  z-index: 10;
+}
+
+.nav-btn:hover {
+  color: #ff85ff;
+}
+
+.carousel {
+  display: flex;
+  gap: 2rem;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  perspective: 1000px;
+  width: 100%;
+}
+
+.cube {
+  flex: 0 0 150px;
+  height: 150px;
+  background: linear-gradient(145deg, #7d00a8, #3d0070);
+  border-radius: 20px;
+  box-shadow:
+    0 0 15px #b93cff,
+    inset 0 0 20px #7a00b3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 3px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  user-select: none;
+  transform-style: preserve-3d;
+  transition:
+    transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow 0.4s ease,
+    background 0.4s ease;
+  position: relative;
+}
+
+.cube::before {
+  content: '';
+  position: absolute;
+  top: 10px; left: 10px; right: 10px; bottom: 10px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.15), transparent);
+  border-radius: 15px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cube.selected {
+  background: linear-gradient(145deg, #ff42ff, #bb00cc);
+  box-shadow:
+    0 0 40px #ff7fff,
+    inset 0 0 40px #ff44ff;
+  transform: translateZ(30px) rotateY(15deg) scale(1.3);
+  z-index: 5;
+}
+
+.cube:not(.selected):hover {
+  box-shadow:
+    0 0 25px #a74ee0,
+    inset 0 0 15px #8e00c0;
+  transform: translateZ(15px) rotateY(10deg) scale(1.1);
+  z-index: 3;
 }
