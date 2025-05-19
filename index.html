@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Disney Universe Menu Clone</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     /* Disney Universe Color Palette */
     :root {
@@ -35,6 +35,7 @@
       overflow: hidden;
       perspective: 1800px;
       perspective-origin: 50% 50%;
+      position: relative;
     }
 
     /* Background Elements */
@@ -45,6 +46,7 @@
       width: 100%;
       height: 100%;
       z-index: 0;
+      pointer-events: none;
     }
 
     .star {
@@ -55,8 +57,12 @@
     }
 
     @keyframes twinkle {
-      0% { opacity: 0.2; }
-      100% { opacity: 1; }
+      0% {
+        opacity: 0.2;
+      }
+      100% {
+        opacity: 1;
+      }
     }
 
     /* Main Menu Container */
@@ -67,6 +73,7 @@
       max-width: 1200px;
       margin: 0 auto;
       z-index: 10;
+      overflow: visible;
     }
 
     /* Cube Track */
@@ -74,18 +81,15 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform-style: preserve-3d;
       display: flex;
       align-items: center;
       height: 100%;
       transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      transform: translate(-50%, -50%);
+      will-change: transform;
     }
 
-    .cube-track.navigating {
-      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    /* 3D Cube */
     .cube-wrapper {
       width: var(--cube-size);
       height: var(--cube-size);
@@ -94,6 +98,8 @@
       transform-style: preserve-3d;
       transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
       flex-shrink: 0;
+      cursor: pointer;
+      user-select: none;
     }
 
     .cube {
@@ -106,12 +112,17 @@
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
-      50% { transform: translateY(-20px) rotateX(5deg) rotateY(5deg); }
+      0%,
+      100% {
+        transform: translateY(0) rotateX(0) rotateY(0);
+      }
+      50% {
+        transform: translateY(-20px) rotateX(5deg) rotateY(5deg);
+      }
     }
 
     .cube-face {
-      position: absolute DMF;
+      position: absolute;
       width: 100%;
       height: 100%;
       background: linear-gradient(135deg, var(--cube-blue), var(--cube-light));
@@ -124,14 +135,32 @@
       box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.4);
       backface-visibility: hidden;
       border-radius: 8px;
+      user-select: none;
     }
 
-    .cube-face.front { transform: translateZ(calc(var(--cube-size) / 2)); }
-    .cube-face.back { transform: rotateY(180deg) translateZ(calc(var(--cube-size) / 2)); background: var(--cube-dark); }
-    .cube-face.right { transform: rotateY(90deg) translateZ(calc(var(--cube-size) / 2)); background: #31557a; }
-    .cube-face.left { transform: rotateY(-90deg) translateZ(calc(var(--cube-size) / 2)); background: #31557a; }
-    .cube-face.top { transform: rotateX(90deg) translateZ(calc(var(--cube-size) / 2)); background: var(--cube-light); }
-    .cube-face.bottom { transform: rotateX(-90deg) translateZ(calc(var(--cube-size) / 2)); background: #1f3a5a; }
+    .cube-face.front {
+      transform: translateZ(calc(var(--cube-size) / 2));
+    }
+    .cube-face.back {
+      transform: rotateY(180deg) translateZ(calc(var(--cube-size) / 2));
+      background: var(--cube-dark);
+    }
+    .cube-face.right {
+      transform: rotateY(90deg) translateZ(calc(var(--cube-size) / 2));
+      background: #31557a;
+    }
+    .cube-face.left {
+      transform: rotateY(-90deg) translateZ(calc(var(--cube-size) / 2));
+      background: #31557a;
+    }
+    .cube-face.top {
+      transform: rotateX(90deg) translateZ(calc(var(--cube-size) / 2));
+      background: var(--cube-light);
+    }
+    .cube-face.bottom {
+      transform: rotateX(-90deg) translateZ(calc(var(--cube-size) / 2));
+      background: #1f3a5a;
+    }
 
     /* Disney Gold Border Effect */
     .cube-face::after {
@@ -164,11 +193,19 @@
       transition: all 0.4s ease;
       z-index: -1;
       animation: shadow-pulse 4s ease-in-out infinite;
+      pointer-events: none;
     }
 
     @keyframes shadow-pulse {
-      0%, 100% { transform: scale(1); opacity: 0.6; }
-      50% { transform: scale(1.2); opacity: 0.8; }
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+      }
     }
 
     /* Cube Positions for 1-Point Perspective */
@@ -192,8 +229,13 @@
       animation: center-float 4s ease-in-out infinite;
     }
     @keyframes center-float {
-      0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
-      50% { transform: translateY(-30px) rotateX(8deg) rotateY(8deg); }
+      0%,
+      100% {
+        transform: translateY(0) rotateX(0) rotateY(0);
+      }
+      50% {
+        transform: translateY(-30px) rotateX(8deg) rotateY(8deg);
+      }
     }
     .cube-wrapper.z-plus-1 {
       transform: translateZ(-400px) scale(0.75);
@@ -226,301 +268,245 @@
       transition: opacity 0.4s ease;
       text-transform: uppercase;
       letter-spacing: 1px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      user-select: none;
+      pointer-events: none;
     }
-    
     .cube-wrapper.center .cube-label {
       opacity: 1;
-      animation: label-glow 2s ease-in-out infinite alternate;
-    }
-    
-    @keyframes label-glow {
-      0% { box-shadow: 0 8px 25px var(--shadow); }
-      100% { box-shadow: 0 8px 35px var(--cube-light); }
     }
 
-    /* Disney Particles */
+    /* Particles */
     .particle {
       position: absolute;
+      width: 6px;
+      height: 6px;
       background: var(--particle);
       border-radius: 50%;
       pointer-events: none;
-      z-index: 5;
-      animation: particle-float 3s ease-out forwards;
+      animation: particle-float 5s linear infinite;
+      opacity: 0.8;
+      filter: drop-shadow(0 0 3px var(--gold));
+      will-change: transform, opacity;
     }
-    
+
     @keyframes particle-float {
-      0% { transform: translate(0, 0) scale(0); opacity: 1; }
-      100% { transform: translate(var(--tx), var(--ty)) scale(1); opacity: 0; }
+      0% {
+        transform: translate(0, 0) scale(0);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translate(-50px, -100px) scale(1);
+        opacity: 0;
+      }
     }
 
-    /* Navigation Zones */
-    .nav-zone {
+    /* Navigation buttons */
+    .nav-buttons {
       position: absolute;
-      top: 0;
-      height: 100%;
-      width: 30%;
-      z-index: 20;
-      cursor: pointer;
-    }
-    
-    .nav-zone.left {
-      left: 0;
-      background: linear-gradient(90deg, rgba(26, 15, 10, 0.5), transparent);
-    }
-    
-    .nav-zone.right {
-      right: 0;
-      background: linear-gradient(270deg, rgba(26, 15, 10, 0.5), transparent);
+      bottom: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      z-index: 15;
+      user-select: none;
     }
 
-    /* Responsive Design */
-    @media (max-width: 1200px) {
-      :root { --cube-size: 180px; }
-      .cube-face { font-size: 4rem; }
-      .cube-wrapper.z-minus-2, .cube-wrapper.z-plus-2 { transform: translateZ(-720px) scale(0.5); }
-      .cube-wrapper.z-minus-1, .cube-wrapper.z-plus-1 { transform: translateZ(-360px) scale(0.75); }
+    .nav-button {
+      background: var(--gold);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      color: var(--bg-dark);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      transition: transform 0.3s ease;
     }
-    
-    @media (max-width: 992px) {
-      :root { --cube-size: 160px; }
-      .cube-face { font-size: 3.5rem; }
-      .cube-wrapper.z-minus-2, .cube-wrapper.z-plus-2 { transform: translateZ(-640px) scale(0.5); }
-      .cube-wrapper.z-minus-1, .cube-wrapper.z-plus-1 { transform: translateZ(-320px) scale(0.75); }
+
+    .nav-button:hover {
+      transform: scale(1.15);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
     }
-    
-    @media (max-width: 768px) {
-      :root { --cube-size: 140px; }
-      .cube-face { font-size: 3rem; }
-      .cube-label { font-size: 1.2rem; }
-      .cube-wrapper.z-minus-2, .cube-wrapper.z-plus-2 { transform: translateZ(-560px) scale(0.5); }
-      .cube-wrapper.z-minus-1, .cube-wrapper.z-plus-1 { transform: translateZ(-280px) scale(0.75); }
-    }
-    
-    @media (max-width: 576px) {
-      :root { --cube-size: 120px; }
-      .cube-face { font-size: 2.5rem; }
-      .cube-label { font-size: 1rem; }
-      .cube-wrapper.z-minus-2, .cube-wrapper.z-plus-2 { transform: translateZ(-480px) scale(0.5); }
-      .cube-wrapper.z-minus-1, .cube-wrapper.z-plus-1 { transform: translateZ(-240px) scale(0.75); }
-    }
-    
-    @media (max-width: 400px) {
-      :root { --cube-size: 100px; }
-      .cube-face { font-size: 2rem; }
-      .cube-wrapper.z-minus-2, .cube-wrapper.z-plus-2 { transform: translateZ(-400px) scale(0.5); }
-      .cube-wrapper.z-minus-1, .cube-wrapper.z-plus-1 { transform: translateZ(-200px) scale(0.75); }
+
+    /* Hide scrollbar if any */
+    ::-webkit-scrollbar {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <!-- Starfield Background -->
-  <div class="stars" id="stars"></div>
-  
-  <!-- Main Menu -->
-  <div class="disney-menu">
-    <div class="nav-zone left" role="button" aria-label="Navigate to previous menu item"></div>
-    <div class="cube-track" id="cube-track"></div>
-    <div class="nav-zone right" role="button" aria-label="Navigate to next menu item"></div>
+  <div class="stars" aria-hidden="true"></div>
+
+  <div class="disney-menu" aria-label="Disney Universe Menu Carousel" role="listbox">
+    <div class="cube-track" aria-live="polite" aria-atomic="true" aria-relevant="additions removals">
+      <!-- Cubes injected by JS -->
+    </div>
+
+    <div class="nav-buttons" aria-label="Carousel navigation">
+      <button class="nav-button" id="prev" aria-label="Previous option">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="nav-button" id="next" aria-label="Next option">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
   </div>
 
   <script>
-    // Disney Universe Menu Data
-    const menuData = [
-      { icon: '<i class="fas fa-user"></i>', label: "About" },
-      { icon: '<i class="fas fa-cube"></i>', label: "Models" },
-      { icon: '<i class="fas fa-palette"></i>', label: "Sketchbook" },
-      { icon: '<i class="fas fa-box-open"></i>', label: "Extras" },
-      { icon: '<i class="fas fa-envelope"></i>', label: "Contact" }
+    // Disney-style Menu Cube Carousel — fully functional
+
+    const cubeTrack = document.querySelector('.cube-track');
+    const options = [
+      { icon: '🎬', label: 'Movies' },
+      { icon: '🎮', label: 'Games' },
+      { icon: '📺', label: 'Shows' },
+      { icon: '🎵', label: 'Music' },
+      { icon: '⚙️', label: 'Settings' },
     ];
-    
-    // DOM Elements
-    const track = document.getElementById('cube-track');
-    const starsContainer = document.getElementById('stars');
-    let currentIndex = 2;
-    let isAnimating = false;
-    let hoverTimeout;
 
-    // Initialize
-    createStars();
-    renderCubes();
-    setupNavigation();
-    startParticles();
+    // Keeps track of which option is centered
+    let centerIndex = 0;
 
-    // Create starfield background
+    // How many cubes to show on each side
+    const visibleRange = 2; // 2 cubes on each side for a total of 5 visible
+
+    // Helper: create a cube element
+    function createCube(option, positionClass) {
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('cube-wrapper', positionClass);
+
+      // The cube itself
+      const cube = document.createElement('div');
+      cube.classList.add('cube');
+
+      // Add faces (just front for simplicity)
+      const faceFront = document.createElement('div');
+      faceFront.classList.add('cube-face', 'front');
+      faceFront.textContent = option.icon;
+
+      cube.appendChild(faceFront);
+
+      // Optional: add shadow under center cube only
+      if (positionClass === 'center') {
+        const shadow = document.createElement('div');
+        shadow.classList.add('cube-shadow');
+        wrapper.appendChild(shadow);
+      }
+
+      // Label
+      const label = document.createElement('div');
+      label.classList.add('cube-label');
+      label.textContent = option.label;
+      wrapper.appendChild(label);
+
+      wrapper.appendChild(cube);
+
+      // Particle effect for center cube
+      if (positionClass === 'center') {
+        spawnParticles(wrapper);
+      }
+
+      return wrapper;
+    }
+
+    // Spawn particles floating up on center cube
+    function spawnParticles(cubeWrapper) {
+      const particleCount = 15;
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+
+        // Random start position inside cube bounds
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = (Math.random() * 5).toFixed(2) + 's';
+
+        cubeWrapper.appendChild(particle);
+      }
+    }
+
+    // Render cubes based on current centerIndex
+    function renderCubes() {
+      cubeTrack.innerHTML = '';
+      for (let offset = -visibleRange; offset <= visibleRange; offset++) {
+        const optionIndex = (centerIndex + offset + options.length) % options.length;
+        let positionClass = '';
+
+        switch (offset) {
+          case -2:
+            positionClass = 'z-minus-2';
+            break;
+          case -1:
+            positionClass = 'z-minus-1';
+            break;
+          case 0:
+            positionClass = 'center';
+            break;
+          case 1:
+            positionClass = 'z-plus-1';
+            break;
+          case 2:
+            positionClass = 'z-plus-2';
+            break;
+          default:
+            positionClass = '';
+        }
+
+        const cube = createCube(options[optionIndex], positionClass);
+        cubeTrack.appendChild(cube);
+      }
+    }
+
+    // Navigation functions
+    function moveLeft() {
+      centerIndex = (centerIndex - 1 + options.length) % options.length;
+      renderCubes();
+    }
+
+    function moveRight() {
+      centerIndex = (centerIndex + 1) % options.length;
+      renderCubes();
+    }
+
+    // Keyboard support
+    window.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft' || e.key === 'a') {
+        moveLeft();
+      } else if (e.key === 'ArrowRight' || e.key === 'd') {
+        moveRight();
+      }
+    });
+
+    // Button clicks
+    document.getElementById('prev').addEventListener('click', moveLeft);
+    document.getElementById('next').addEventListener('click', moveRight);
+
+    // Stars background — generate random stars once
     function createStars() {
-      for (let i = 0; i < 200; i++) {
+      const starsContainer = document.querySelector('.stars');
+      const starCount = 100;
+
+      for (let i = 0; i < starCount; i++) {
         const star = document.createElement('div');
-        star.className = 'star';
-        star.style.width = `${Math.random() * 3}px`;
-        star.style.height = star.style.width;
-        star.style.left = `${Math.random() * 100}%`;
-        star.style.top = `${Math.random() * 100}%`;
-        star.style.animationDelay = `${Math.random() * 3}s`;
+        star.classList.add('star');
+        const size = Math.random() * 2 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.animationDelay = (Math.random() * 3).toFixed(2) + 's';
         starsContainer.appendChild(star);
       }
     }
 
-    // Render 3D cubes
-    function renderCubes() {
-      track.innerHTML = '';
-      
-      for (let i = -2; i <= 2; i++) {
-        const dataIndex = currentIndex + i;
-        if (dataIndex < 0 || dataIndex >= menuData.length) continue;
-        
-        const wrapper = document.createElement('div');
-        wrapper.className = `cube-wrapper ${getPositionClass(i)}`;
-        wrapper.setAttribute('role', i === 0 ? 'button' : 'presentation');
-        wrapper.setAttribute('aria-label', i === 0 ? `Current menu item: ${menuData[dataIndex].label}` : '');
-        if (i === 0) wrapper.tabIndex = 0;
-        
-        const cube = document.createElement('div');
-        cube.className = 'cube';
-        
-        ['front', 'back', 'right', 'left', 'top', 'bottom'].forEach(face => {
-          const faceEl = document.createElement('div');
-          faceEl.className = `cube-face ${face}`;
-          if (face === 'front') faceEl.innerHTML = menuData[dataIndex].icon;
-          cube.appendChild(faceEl);
-        });
-        
-        wrapper.innerHTML = `
-          ${cube.outerHTML}
-          <div class="cube-shadow"></div>
-          <div class="cube-label">${menuData[dataIndex].label}</div>
-        `;
-        
-        track.appendChild(wrapper);
-      }
-      
-      createCenterParticles();
-    }
-    
-    function getPositionClass(offset) {
-      if (offset === 0) return 'center';
-      return offset < 0 ? `z-minus-${Math.abs(offset)}` : `z-plus-${offset}`;
-    }
-    
-    // Navigation setup
-    function setupNavigation() {
-      const leftZone = document.querySelector('.nav-zone.left');
-      const rightZone = document.querySelector('.nav-zone.right');
-      
-      leftZone.addEventListener('mouseenter', () => startHover(-1));
-      rightZone.addEventListener('mouseenter', () => startHover(1));
-      leftZone.addEventListener('mouseleave', stopHover);
-      rightZone.addEventListener('mouseleave', stopHover);
-      
-      leftZone.addEventListener('click', () => navigate(-1));
-      rightZone.addEventListener('click', () => navigate(1));
-      
-      let touchStartX = 0;
-      
-      track.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-      });
-      
-      track.addEventListener('touchmove', (e) => {
-        const touchX = e.touches[0].clientX;
-        const diff = touchStartX - touchX;
-        const threshold = window.innerWidth * 0.1;
-        if (Math.abs(diff) > threshold) {
-          navigate(diff > 0 ? 1 : -1);
-          touchStartX = touchX;
-        }
-      });
-      
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') navigate(-1);
-        if (e.key === 'ArrowRight') navigate(1);
-      });
-      
-      track.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && e.target.classList.contains('cube-wrapper')) {
-          console.log(`Selected: ${e.target.querySelector('.cube-label').textContent}`);
-        }
-      });
-    }
-    
-    function startHover(direction) {
-      clearTimeout(hoverTimeout);
-      hoverTimeout = setTimeout(() => {
-        navigate(direction);
-        startHover(direction);
-      }, 500);
-    }
-    
-    function stopHover() {
-      clearTimeout(hoverTimeout);
-    }
-    
-    function navigate(direction) {
-      if (isAnimating) return;
-      const newIndex = currentIndex + direction;
-      if (newIndex < 0 || newIndex >= menuData.length) return;
-      
-      isAnimating = true;
-      currentIndex = newIndex;
-      
-      track.classList.add('navigating');
-      track.style.transform = `translate(-50%, -50%) translateZ(${direction * 400}px)`;
-      
-      setTimeout(() => {
-        track.classList.remove('navigating');
-        track.style.transform = 'translate(-50%, -50%) translateZ(0)';
-        renderCubes();
-        isAnimating = false;
-        document.querySelector('.cube-wrapper.center')?.focus();
-      }, 800);
-    }
-    
-    // Particle Effects
-    function startParticles() {
-      requestAnimationFrame(createRandomParticles);
-      setInterval(() => requestAnimationFrame(createRandomParticles), 2000);
-    }
-    
-    function createRandomParticles() {
-      for (let i = 0; i < 5; i++) {
-        createParticle(
-          window.innerWidth * Math.random(),
-          window.innerHeight * Math.random()
-        );
-      }
-    }
-    
-    function createCenterParticles() {
-      const centerCube = document.querySelector('.cube-wrapper.center');
-      if (!centerCube) return;
-      
-      const rect = centerCube.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      
-      for (let i = 0; i < 10; i++) {
-        setTimeout(() => {
-          createParticle(centerX, centerY);
-        }, i * 150);
-      }
-    }
-    
-    function createParticle(x, y) {
-      if (document.querySelectorAll('.particle').length > 50) return;
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      const size = Math.random() * 8 + 4;
-      particle.style.width = `${size}px`;
-      particle.style.height = `${size}px`;
-      particle.style.left = `${x}px`;
-      particle.style.top = `${y}px`;
-      const angle = Math.random() * Math.PI * 2;
-      const distance = Math.random() * 100 + 50;
-      particle.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
-      particle.style.setProperty('--ty', `${Math.sin(angle) * distance - 50}px`);
-      document.body.appendChild(particle);
-      setTimeout(() => particle.remove(), 3000);
-    }
+    // Init
+    createStars();
+    renderCubes();
   </script>
 </body>
 </html>
