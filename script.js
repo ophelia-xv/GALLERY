@@ -1,16 +1,39 @@
-// Simple hover tilt effect based on mouse movement inside the block
-document.querySelectorAll('.block').forEach(block => {
-  block.addEventListener('mousemove', e => {
-    const rect = block.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    const rotateX = (-y / (rect.height / 2)) * 8;  // max 8 deg rotation
-    const rotateY = (x / (rect.width / 2)) * 8;
+const carousel = document.querySelector('.carousel');
+const cubes = Array.from(carousel.children);
+const btnLeft = document.querySelector('.nav-btn.left');
+const btnRight = document.querySelector('.nav-btn.right');
 
-    block.style.transform = `translateY(-20px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
+let selectedIndex = 0;
+
+function updateSelected(index) {
+  cubes.forEach((cube, i) => {
+    cube.classList.toggle('selected', i === index);
   });
+  // Scroll carousel to center selected cube
+  const cubeWidth = cubes[0].offsetWidth + parseInt(getComputedStyle(cubes[0]).marginRight);
+  const scrollPos = cubeWidth * index - (carousel.offsetWidth / 2) + (cubeWidth / 2);
+  carousel.scrollTo({
+    left: scrollPos,
+    behavior: 'smooth'
+  });
+}
 
-  block.addEventListener('mouseleave', () => {
-    block.style.transform = '';
+btnLeft.addEventListener('click', () => {
+  selectedIndex = (selectedIndex - 1 + cubes.length) % cubes.length;
+  updateSelected(selectedIndex);
+});
+
+btnRight.addEventListener('click', () => {
+  selectedIndex = (selectedIndex + 1) % cubes.length;
+  updateSelected(selectedIndex);
+});
+
+cubes.forEach((cube, i) => {
+  cube.addEventListener('click', () => {
+    selectedIndex = i;
+    updateSelected(selectedIndex);
   });
 });
+
+// Initialize
+updateSelected(selectedIndex);
