@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ophelia - Disney Universe Style Menu</title>
+  <title>Disney Universe Style Menu - Smooth Scroll</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet" />
   <style>
     /* Reset */
@@ -31,53 +31,51 @@
       top: 0; left: 0; width: 100%; height: 100%;
       background:
         radial-gradient(2px 2px at 20% 30%, #3aff00, transparent),
-        radial-gradient(1.5px 1.5px at 70% 70%, #ff6700, transparent),
-        radial-gradient(2.5px 2.5px at 45% 80%, #ff6700, transparent),
+        radial-gradient(1.5px 1.5px at 70% 70%, #3aff00, transparent),
+        radial-gradient(2.5px 2.5px at 45% 80%, #3aff00, transparent),
         radial-gradient(1px 1px at 90% 15%, #3aff00, transparent);
       background-repeat: repeat;
       background-size: 100% 100%;
       z-index: -1;
-      opacity: 0.15;
-      animation: twinkle 5s infinite alternate;
+      opacity: 0.08;
+      animation: twinkle 6s infinite alternate;
     }
     @keyframes twinkle {
-      0%, 100% {opacity: 0.15;}
-      50% {opacity: 0.35;}
+      0%, 100% {opacity: 0.08;}
+      50% {opacity: 0.18;}
     }
 
     /* Container */
     .carousel-container {
-      width: 800px;
+      width: 820px;
       height: 250px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 40px;
-      transform-style: preserve-3d;
       position: relative;
       overflow: visible;
-    }
-
-    /* Cube base styles */
-    .cube {
-      width: 140px;
-      height: 140px;
-      background: black;
-      border-radius: 15px;
-      box-shadow:
-        inset 0 0 15px #ff7400,
-        0 0 40px #3aff00;
-      cursor: pointer;
-      transition:
-        transform 0.5s cubic-bezier(0.23,1,0.32,1),
-        box-shadow 0.5s ease,
-        filter 0.5s ease;
       display: flex;
       justify-content: center;
       align-items: center;
+      gap: 60px;
+      transform-style: preserve-3d;
+    }
+
+    /* Cube styles */
+    .cube {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      background: #111;
+      border: 3px solid #3aff00; /* Green outline, no neon */
+      border-radius: 15px;
+      box-shadow: inset 0 0 6px #051505;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition:
+        transform 0.7s cubic-bezier(0.23,1,0.32,1),
+        border-color 0.4s ease;
       will-change: transform;
-      position: relative;
-      filter: drop-shadow(0 0 10px #3aff00);
+      filter: drop-shadow(0 0 3px #0f320f);
     }
 
     .cube svg {
@@ -87,87 +85,37 @@
       stroke-width: 2.5;
       stroke-linejoin: round;
       stroke-linecap: round;
-      stroke: #ff7400;
-      filter: drop-shadow(0 0 6px #ff7400);
+      stroke: #3aff00;
       transition: stroke 0.3s ease;
     }
-
     .cube:hover svg {
-      stroke: #3aff00;
-      filter: drop-shadow(0 0 15px #3aff00);
+      stroke: #8fff6f;
     }
 
-    /* States */
-    .cube.center {
-      transform: translateZ(80px) scale(1.4);
-      box-shadow:
-        inset 0 0 25px #3aff00,
-        0 0 70px #3aff00;
-      filter: drop-shadow(0 0 15px #3aff00);
-      z-index: 10;
-    }
-
-    .cube.left2,
-    .cube.right2 {
-      transform: translateZ(10px) scale(0.7);
-      filter: drop-shadow(0 0 6px #ff7400);
-      box-shadow:
-        inset 0 0 10px #ff7400,
-        0 0 20px #ff7400;
-      z-index: 2;
-    }
-    .cube.left1,
-    .cube.right1 {
-      transform: translateZ(30px) scale(0.9);
-      box-shadow:
-        inset 0 0 18px #ff7400,
-        0 0 35px #ff7400;
-      filter: drop-shadow(0 0 10px #ff7400);
-      z-index: 5;
-    }
-
-    /* Positions on X axis */
-    .left2 {
-      transform: translateX(-220px) translateZ(10px) scale(0.7);
-    }
-    .left1 {
-      transform: translateX(-110px) translateZ(30px) scale(0.9);
-    }
-    .center {
-      transform: translateX(0) translateZ(80px) scale(1.4);
-    }
-    .right1 {
-      transform: translateX(110px) translateZ(30px) scale(0.9);
-    }
-    .right2 {
-      transform: translateX(220px) translateZ(10px) scale(0.7);
-    }
-
-    /* Hide scrollbar - no scroll here anyway */
-    ::-webkit-scrollbar {
-      display: none;
+    /* Bounce animation for center cube */
+    @keyframes bounceCenter {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
     }
 
   </style>
 </head>
 <body>
   <div class="carousel-container" aria-label="Main Menu">
-    <!-- We'll add cubes via JS -->
+    <!-- Cubes will be generated dynamically -->
   </div>
 
   <script>
-    // SVG Icons
     const icons = {
-      sketchbook: `<svg viewBox="0 0 64 64" stroke="orange"><path d="M44 6H20a4 4 0 0 0-4 4v44a4 4 0 0 0 4 4h24a4 4 0 0 0 4-4V10a4 4 0 0 0-4-4z"/><path d="M24 16h16M24 24h16M24 32h16M24 40h16"/></svg>`,
-      model3d: `<svg viewBox="0 0 64 64" stroke="orange"><path d="M32 4l24 14v28L32 60 8 46V18z"/><path d="M32 60V4"/><path d="M56 18L32 32 8 18"/></svg>`,
-      about: `<svg viewBox="0 0 64 64" stroke="orange"><circle cx="32" cy="32" r="30"/><line x1="32" y1="22" x2="32" y2="38"/><circle cx="32" cy="46" r="2"/></svg>`,
-      contact: `<svg viewBox="0 0 64 64" stroke="orange"><rect x="8" y="16" width="48" height="32" rx="4" ry="4"/><polyline points="8,16 32,36 56,16"/></svg>`,
-      others: `<svg viewBox="0 0 64 64" stroke="orange"><polygon points="32 4 39 26 62 26 43 39 50 60 32 47 14 60 21 39 2 26 25 26"/></svg>`
+      sketchbook: `<svg viewBox="0 0 64 64" stroke="currentColor"><path d="M44 6H20a4 4 0 0 0-4 4v44a4 4 0 0 0 4 4h24a4 4 0 0 0 4-4V10a4 4 0 0 0-4-4z"/><path d="M24 16h16M24 24h16M24 32h16M24 40h16"/></svg>`,
+      model3d: `<svg viewBox="0 0 64 64" stroke="currentColor"><path d="M32 4l24 14v28L32 60 8 46V18z"/><path d="M32 60V4"/><path d="M56 18L32 32 8 18"/></svg>`,
+      about: `<svg viewBox="0 0 64 64" stroke="currentColor"><circle cx="32" cy="32" r="30"/><line x1="32" y1="22" x2="32" y2="38"/><circle cx="32" cy="46" r="2"/></svg>`,
+      contact: `<svg viewBox="0 0 64 64" stroke="currentColor"><rect x="8" y="16" width="48" height="32" rx="4" ry="4"/><polyline points="8,16 32,36 56,16"/></svg>`,
+      others: `<svg viewBox="0 0 64 64" stroke="currentColor"><polygon points="32 4 39 26 62 26 43 39 50 60 32 47 14 60 21 39 2 26 25 26"/></svg>`
     };
 
     const container = document.querySelector('.carousel-container');
 
-    // Order of menu items
     const menuItems = [
       { id: 'others', icon: icons.others },
       { id: 'contact', icon: icons.contact },
@@ -176,42 +124,92 @@
       { id: 'about', icon: icons.about }
     ];
 
-    // Positions array to assign classes
-    // We'll display 5 cubes: left2, left1, center, right1, right2
-    const positions = ['left2', 'left1', 'center', 'right1', 'right2'];
+    // We store current center index
+    let centerIndex = 2; // sketchbook start center
 
-    // Render cubes and assign initial classes
-    function renderCubes(centerIndex) {
-      container.innerHTML = '';
-      // Calculate indices of cubes relative to center
-      // We want 2 left, center, 2 right
-      // Use modulo to wrap around
-      for (let i = -2; i <= 2; i++) {
-        const index = (centerIndex + i + menuItems.length) % menuItems.length;
-        const posClass = positions[i + 2];
-        const item = menuItems[index];
-        const cube = document.createElement('div');
-        cube.classList.add('cube', posClass);
-        cube.dataset.id = item.id;
-        cube.innerHTML = item.icon;
-        // Add hover listener
-        cube.addEventListener('mouseenter', () => {
-          // Make hovered cube center
-          const newCenterIndex = index;
-          if (newCenterIndex !== centerIndex) {
-            renderCubes(newCenterIndex);
+    // Positions relative to center, X offsets and scale
+    const layout = [
+      { pos: -2, x: -260, scale: 0.7, zIndex: 1, yOffset: 0 },
+      { pos: -1, x: -130, scale: 0.9, zIndex: 3, yOffset: 0 },
+      { pos: 0, x: 0, scale: 1.4, zIndex: 10, yOffset: -10 }, // center cube bounces
+      { pos: 1, x: 130, scale: 0.9, zIndex: 3, yOffset: 0 },
+      { pos: 2, x: 260, scale: 0.7, zIndex: 1, yOffset: 0 }
+    ];
+
+    // Delay scroll timer
+    let scrollTimeout = null;
+    const scrollDelay = 400; // ms
+
+    // Bounce control
+    let lastCenterCube = null;
+
+    function createCube(item, pos) {
+      const cube = document.createElement('div');
+      cube.classList.add('cube');
+      cube.innerHTML = item.icon;
+      cube.dataset.id = item.id;
+      cube.style.zIndex = pos.zIndex;
+      // Initial transform setup
+      applyTransform(cube, pos);
+      cube.addEventListener('mouseenter', () => {
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          const newIndex = menuItems.indexOf(item);
+          if (newIndex !== centerIndex) {
+            setCenterIndex(newIndex);
           }
-        });
-        // Add click listener placeholder
-        cube.addEventListener('click', () => {
-          alert(`Clicked on ${item.id.toUpperCase()}`);
-        });
-        container.appendChild(cube);
+        }, scrollDelay);
+      });
+      cube.addEventListener('mouseleave', () => {
+        if (scrollTimeout) {
+          clearTimeout(scrollTimeout);
+          scrollTimeout = null;
+        }
+      });
+      cube.addEventListener('click', () => {
+        alert(`Clicked on ${item.id.toUpperCase()}`);
+      });
+      return cube;
+    }
+
+    function applyTransform(cube, pos) {
+      // Compose transform with translateX, scale, translateY
+      cube.style.transform = `
+        translateX(${pos.x}px)
+        translateY(${pos.yOffset}px)
+        scale(${pos.scale})
+      `;
+      if (pos.pos === 0) {
+        // Center cube bounce animation
+        cube.style.animation = 'bounceCenter 1s ease infinite';
+      } else {
+        cube.style.animation = 'none';
       }
     }
 
-    // Initial render, center at index 2 = sketchbook
-    renderCubes(2);
+    function setCenterIndex(newIndex) {
+      centerIndex = (newIndex + menuItems.length) % menuItems.length;
+      updateCubes();
+    }
+
+    let cubes = [];
+
+    function updateCubes() {
+      // Clear container
+      container.innerHTML = '';
+      cubes = [];
+
+      for (let i = -2; i <= 2; i++) {
+        let idx = (centerIndex + i + menuItems.length) % menuItems.length;
+        const cube = createCube(menuItems[idx], layout[i + 2]);
+        container.appendChild(cube);
+        cubes.push(cube);
+      }
+    }
+
+    // Initial load
+    updateCubes();
+
   </script>
 </body>
 </html>
