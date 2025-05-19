@@ -1,512 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Disney Universe Menu Clone</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <style>
-    /* Disney Universe Color Palette */
-    :root {
-      --bg-dark: #1a0f0a;
-      --bg-light: #2b1a0f;
-      --cube-blue: #3a5c83;
-      --cube-light: #4a7ca8;
-      --cube-dark: #2a4a6d;
-      --gold: #ffd700;
-      --particle: rgba(255, 215, 0, 0.7);
-      --shadow: rgba(0, 0, 0, 0.6);
-      --cube-size: 200px;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: radial-gradient(ellipse at center, var(--bg-light), var(--bg-dark));
-      font-family: 'Arial', sans-serif;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      perspective: 1800px;
-      perspective-origin: 50% 50%;
-      position: relative;
-    }
-
-    /* Background Elements */
-    .stars {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .star {
-      position: absolute;
-      background: white;
-      border-radius: 50%;
-      animation: twinkle 3s infinite alternate;
-    }
-
-    @keyframes twinkle {
-      0% {
-        opacity: 0.2;
-      }
-      100% {
-        opacity: 1;
-      }
-    }
-
-    /* Main Menu Container */
-    .disney-menu {
-      position: relative;
-      width: 100%;
-      height: 70vh;
-      max-width: 1200px;
-      margin: 0 auto;
-      z-index: 10;
-      overflow: visible;
-    }
-
-    /* Cube Track */
-    .cube-track {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform-style: preserve-3d;
-      display: flex;
-      align-items: center;
-      height: 100%;
-      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-      transform: translate(-50%, -50%);
-      will-change: transform;
-    }
-
-    .cube-wrapper {
-      width: var(--cube-size);
-      height: var(--cube-size);
-      margin: 0 5px;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-      flex-shrink: 0;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .cube {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: inherit;
-      animation: float 4s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%,
-      100% {
-        transform: translateY(0) rotateX(0) rotateY(0);
-      }
-      50% {
-        transform: translateY(-20px) rotateX(5deg) rotateY(5deg);
-      }
-    }
-
-    .cube-face {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, var(--cube-blue), var(--cube-light));
-      border: 2px solid rgba(255, 255, 255, 0.15);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 4.5rem;
-      box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.4);
-      backface-visibility: hidden;
-      border-radius: 8px;
-      user-select: none;
-    }
-
-    .cube-face.front {
-      transform: translateZ(calc(var(--cube-size) / 2));
-    }
-    .cube-face.back {
-      transform: rotateY(180deg) translateZ(calc(var(--cube-size) / 2));
-      background: var(--cube-dark);
-    }
-    .cube-face.right {
-      transform: rotateY(90deg) translateZ(calc(var(--cube-size) / 2));
-      background: #31557a;
-    }
-    .cube-face.left {
-      transform: rotateY(-90deg) translateZ(calc(var(--cube-size) / 2));
-      background: #31557a;
-    }
-    .cube-face.top {
-      transform: rotateX(90deg) translateZ(calc(var(--cube-size) / 2));
-      background: var(--cube-light);
-    }
-    .cube-face.bottom {
-      transform: rotateX(-90deg) translateZ(calc(var(--cube-size) / 2));
-      background: #1f3a5a;
-    }
-
-    /* Disney Gold Border Effect */
-    .cube-face::after {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      border: 2px solid transparent;
-      border-radius: 10px;
-      background: linear-gradient(45deg, transparent, var(--gold), transparent) border-box;
-      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: destination-out;
-      mask-composite: exclude;
-      pointer-events: none;
-    }
-
-    /* Floating Shadow */
-    .cube-shadow {
-      position: absolute;
-      bottom: -40px;
-      left: 10%;
-      width: 80%;
-      height: 30px;
-      background: var(--shadow);
-      border-radius: 50%;
-      filter: blur(30px);
-      opacity: 0.8;
-      transition: all 0.4s ease;
-      z-index: -1;
-      animation: shadow-pulse 4s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    @keyframes shadow-pulse {
-      0%,
-      100% {
-        transform: scale(1);
-        opacity: 0.6;
-      }
-      50% {
-        transform: scale(1.2);
-        opacity: 0.8;
-      }
-    }
-
-    /* Cube Positions for 1-Point Perspective */
-    .cube-wrapper.z-minus-2 {
-      transform: translateZ(-800px) scale(0.5);
-      opacity: 0.3;
-      z-index: 1;
-      animation-delay: 0.1s;
-    }
-    .cube-wrapper.z-minus-1 {
-      transform: translateZ(-400px) scale(0.75);
-      opacity: 0.6;
-      z-index: 2;
-      animation-delay: 0.2s;
-    }
-    .cube-wrapper.center {
-      transform: translateZ(0) scale(1);
-      z-index: 3;
-    }
-    .cube-wrapper.center .cube {
-      animation: center-float 4s ease-in-out infinite;
-    }
-    @keyframes center-float {
-      0%,
-      100% {
-        transform: translateY(0) rotateX(0) rotateY(0);
-      }
-      50% {
-        transform: translateY(-30px) rotateX(8deg) rotateY(8deg);
-      }
-    }
-    .cube-wrapper.z-plus-1 {
-      transform: translateZ(-400px) scale(0.75);
-      opacity: 0.6;
-      z-index: 2;
-      animation-delay: 0.2s;
-    }
-    .cube-wrapper.z-plus-2 {
-      transform: translateZ(-800px) scale(0.5);
-      opacity: 0.3;
-      z-index: 1;
-      animation-delay: 0.1s;
-    }
-
-    /* Label */
-    .cube-label {
-      position: absolute;
-      bottom: -70px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(to right, var(--cube-blue), var(--cube-light));
-      color: white;
-      padding: 12px 25px;
-      border-radius: 30px;
-      font-size: 1.5rem;
-      font-weight: bold;
-      white-space: nowrap;
-      box-shadow: 0 8px 25px var(--shadow);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-      user-select: none;
-      pointer-events: none;
-    }
-    .cube-wrapper.center .cube-label {
-      opacity: 1;
-    }
-
-    /* Particles */
-    .particle {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      background: var(--particle);
-      border-radius: 50%;
-      pointer-events: none;
-      animation: particle-float 5s linear infinite;
-      opacity: 0.8;
-      filter: drop-shadow(0 0 3px var(--gold));
-      will-change: transform, opacity;
-    }
-
-    @keyframes particle-float {
-      0% {
-        transform: translate(0, 0) scale(0);
-        opacity: 0.7;
-      }
-      100% {
-        transform: translate(-50px, -100px) scale(1);
-        opacity: 0;
-      }
-    }
-
-    /* Navigation buttons */
-    .nav-buttons {
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      z-index: 15;
-      user-select: none;
-    }
-
-    .nav-button {
-      background: var(--gold);
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      color: var(--bg-dark);
-      font-size: 1.5rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-      transition: transform 0.3s ease;
-    }
-
-    .nav-button:hover {
-      transform: scale(1.15);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-    }
-
-    /* Hide scrollbar if any */
-    ::-webkit-scrollbar {
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio - Disney Universe Style</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Bubblegum Sans', sans-serif;
+            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+            overflow-x: hidden;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        /* Animated background particles */
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            animation: float 5s infinite ease-in-out;
+            pointer-events: none;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+            50% { transform: translateY(-20px) scale(1.5); opacity: 1; }
+        }
+        /* Carousel container */
+        .carousel {
+            display: flex;
+            overflow-x: hidden;
+            width: 80%;
+            max-width: 1200px;
+            position: relative;
+        }
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        /* Project card */
+        .card {
+            flex: 0 0 250px;
+            height: 350px;
+            margin: 20px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            transform: perspective(1000px) rotateY(0deg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: perspective(1000px) rotateY(5deg) scale(1.1);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+        .card img {
+            width: 100%;
+            height: 60%;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 15px;
+            text-align: center;
+        }
+        .card-content h3 {
+            margin: 10px 0;
+            color: #333;
+            font-size: 1.5rem;
+        }
+        .card-content p {
+            color: #666;
+            font-size: 1rem;
+        }
+        /* Navigation buttons */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ff6f61;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: background 0.3s;
+        }
+        .nav-btn:hover {
+            background: #ff3d2e;
+        }
+        .prev-btn { left: 20px; }
+        .next-btn { right: 20px; }
+        /* Title */
+        .portfolio-title {
+            position: absolute;
+            top: 20px;
+            text-align: center;
+            width: 100%;
+            color: white;
+            font-size: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        /* Retro CRT effect */
+        .crt::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1),
+                rgba(0, 0, 0, 0.1) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .carousel { width: 90%; }
+            .card { flex: 0 0 200px; height: 300px; }
+            .portfolio-title { font-size: 2rem; }
+        }
+    </style>
 </head>
-<body>
-  <div class="stars" aria-hidden="true"></div>
+<body class="crt">
+    <!-- Sparkle particles -->
+    <div class="sparkle" style="left: 10%; top: 20%; animation-delay: 0s;"></div>
+    <div class="sparkle" style="left: 30%; top: 50%; animation-delay: 1s;"></div>
+    <div class="sparkle" style="left: 60%; top: 30%; animation-delay: 2s;"></div>
+    <div class="sparkle" style="left: 80%; top: 70%; animation-delay: 3s;"></div>
 
-  <div class="disney-menu" aria-label="Disney Universe Menu Carousel" role="listbox">
-    <div class="cube-track" aria-live="polite" aria-atomic="true" aria-relevant="additions removals">
-      <!-- Cubes injected by JS -->
+    <!-- Portfolio Title -->
+    <h1 class="portfolio-title">My Creative Portfolio</h1>
+
+    <!-- Carousel -->
+    <div class="carousel">
+        <button class="nav-btn prev-btn">&larr;</button>
+        <div class="carousel-inner">
+            <!-- Project Cards -->
+            <div class="card">
+                <img src="https://via.placeholder.com/250x150?text=3D+Model" alt="3D Model">
+                <div class="card-content">
+                    <h3>3D Model</h3>
+                    <p>Sci-fi character made in Blender.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/250x150?text=2D+Art" alt="2D Art">
+                <div class="card-content">
+                    <h3>2D Art</h3>
+                    <p>Pixel art for a retro game.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/250x150?text=Game" alt="Game">
+                <div class="card-content">
+                    <h3>Game</h3>
+                    <p>Platformer built in Unity.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/250x150?text=Website" alt="Website">
+                <div class="card-content">
+                    <h3>Website</h3>
+                    <p>Portfolio site with React.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/250x150?text=Misc" alt="Misc">
+                <div class="card-content">
+                    <h3>Misc Project</h3>
+                    <p>Animated short in After Effects.</p>
+                </div>
+            </div>
+        </div>
+        <button class="nav-btn next-btn">&rarr;</button>
     </div>
 
-    <div class="nav-buttons" aria-label="Carousel navigation">
-      <button class="nav-button" id="prev" aria-label="Previous option">
-        <i class="fas fa-chevron-left"></i>
-      </button>
-      <button class="nav-button" id="next" aria-label="Next option">
-        <i class="fas fa-chevron-right"></i>
-      </button>
-    </div>
-  </div>
+    <script>
+        // Carousel functionality
+        const carouselInner = document.querySelector('.carousel-inner');
+        const cards = document.querySelectorAll('.card');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        let currentIndex = 0;
+        const cardWidth = cards[0].offsetWidth + 40; // Card width + margin
 
-  <script>
-    // Disney-style Menu Cube Carousel — fully functional
-
-    const cubeTrack = document.querySelector('.cube-track');
-    const options = [
-      { icon: '🎬', label: 'Movies' },
-      { icon: '🎮', label: 'Games' },
-      { icon: '📺', label: 'Shows' },
-      { icon: '🎵', label: 'Music' },
-      { icon: '⚙️', label: 'Settings' },
-    ];
-
-    // Keeps track of which option is centered
-    let centerIndex = 0;
-
-    // How many cubes to show on each side
-    const visibleRange = 2; // 2 cubes on each side for a total of 5 visible
-
-    // Helper: create a cube element
-    function createCube(option, positionClass) {
-      const wrapper = document.createElement('div');
-      wrapper.classList.add('cube-wrapper', positionClass);
-
-      // The cube itself
-      const cube = document.createElement('div');
-      cube.classList.add('cube');
-
-      // Add faces (just front for simplicity)
-      const faceFront = document.createElement('div');
-      faceFront.classList.add('cube-face', 'front');
-      faceFront.textContent = option.icon;
-
-      cube.appendChild(faceFront);
-
-      // Optional: add shadow under center cube only
-      if (positionClass === 'center') {
-        const shadow = document.createElement('div');
-        shadow.classList.add('cube-shadow');
-        wrapper.appendChild(shadow);
-      }
-
-      // Label
-      const label = document.createElement('div');
-      label.classList.add('cube-label');
-      label.textContent = option.label;
-      wrapper.appendChild(label);
-
-      wrapper.appendChild(cube);
-
-      // Particle effect for center cube
-      if (positionClass === 'center') {
-        spawnParticles(wrapper);
-      }
-
-      return wrapper;
-    }
-
-    // Spawn particles floating up on center cube
-    function spawnParticles(cubeWrapper) {
-      const particleCount = 15;
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-
-        // Random start position inside cube bounds
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = (Math.random() * 5).toFixed(2) + 's';
-
-        cubeWrapper.appendChild(particle);
-      }
-    }
-
-    // Render cubes based on current centerIndex
-    function renderCubes() {
-      cubeTrack.innerHTML = '';
-      for (let offset = -visibleRange; offset <= visibleRange; offset++) {
-        const optionIndex = (centerIndex + offset + options.length) % options.length;
-        let positionClass = '';
-
-        switch (offset) {
-          case -2:
-            positionClass = 'z-minus-2';
-            break;
-          case -1:
-            positionClass = 'z-minus-1';
-            break;
-          case 0:
-            positionClass = 'center';
-            break;
-          case 1:
-            positionClass = 'z-plus-1';
-            break;
-          case 2:
-            positionClass = 'z-plus-2';
-            break;
-          default:
-            positionClass = '';
+        function updateCarousel() {
+            carouselInner.style.transform = `translateX(${-currentIndex * cardWidth}px)`;
         }
 
-        const cube = createCube(options[optionIndex], positionClass);
-        cubeTrack.appendChild(cube);
-      }
-    }
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < cards.length - 3) {
+                currentIndex++;
+                updateCarousel();
+            }
+        });
 
-    // Navigation functions
-    function moveLeft() {
-      centerIndex = (centerIndex - 1 + options.length) % options.length;
-      renderCubes();
-    }
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCarousel();
+            }
+        });
 
-    function moveRight() {
-      centerIndex = (centerIndex + 1) % options.length;
-      renderCubes();
-    }
-
-    // Keyboard support
-    window.addEventListener('keydown', e => {
-      if (e.key === 'ArrowLeft' || e.key === 'a') {
-        moveLeft();
-      } else if (e.key === 'ArrowRight' || e.key === 'd') {
-        moveRight();
-      }
-    });
-
-    // Button clicks
-    document.getElementById('prev').addEventListener('click', moveLeft);
-    document.getElementById('next').addEventListener('click', moveRight);
-
-    // Stars background — generate random stars once
-    function createStars() {
-      const starsContainer = document.querySelector('.stars');
-      const starCount = 100;
-
-      for (let i = 0; i < starCount; i++) {
-        const star = document.createElement('div');
-        star.classList.add('star');
-        const size = Math.random() * 2 + 1;
-        star.style.width = size + 'px';
-        star.style.height = size + 'px';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.animationDelay = (Math.random() * 3).toFixed(2) + 's';
-        starsContainer.appendChild(star);
-      }
-    }
-
-    // Init
-    createStars();
-    renderCubes();
-  </script>
+        // Auto-slide every 5 seconds
+        setInterval(() => {
+            if (currentIndex < cards.length - 3) {
+                currentIndex++;
+            } else {
+                currentIndex = 0;
+            }
+            updateCarousel();
+        }, 5000);
+    </script>
 </body>
 </html>
