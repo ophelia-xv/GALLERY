@@ -1,24 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ophelia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ophelia — Floating Menu</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="stars-bg"></div>
 
-  <h1 class="title">OPHELIA</h1>
-  <p class="subtitle">A Dark Portfolio Realm</p>
-
-  <div class="menu">
-    <a href="#art" class="block">🎨 Artwork</a>
-    <a href="#models" class="block">🧊 3D Models</a>
-    <a href="#animations" class="block">📽️ Animations</a>
-    <a href="#about" class="block">📜 About</a>
-    <a href="#contact" class="block">💌 Contact</a>
-  </div>
+  <main class="menu-container">
+    <a href="#about" class="block block-edge left">ABOUT</a>
+    <div class="block-group">
+      <a href="#sketchbook" class="block big">SKETCHBOOK</a>
+      <a href="#models" class="block big">3D MODELS</a>
+    </div>
+    <a href="#contact" class="block block-edge right">CONTACT</a>
+  </main>
 
   <script src="script.js"></script>
 </body>
