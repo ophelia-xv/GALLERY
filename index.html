@@ -50,11 +50,13 @@
         /* Card container */
         .card-container {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             justify-content: center;
             width: 90%;
             max-width: 1400px;
+            overflow-x: auto;
             gap: 20px;
+            padding: 20px 0;
         }
         /* Category card */
         .card {
@@ -92,38 +94,36 @@
             color: #333;
             font-family: 'Bubblegum Sans', sans-serif;
             font-size: 1.4rem;
-            transition: color 0.3s, text-shadow 0.3s;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
         }
         .card-content p {
             color: #555;
             font-size: 0.9rem;
             display: none;
+            transition: opacity 0.3s ease 0.3s;
         }
         .card:hover .card-content h3 {
             color: #ffffff;
             text-shadow: 0 0 5px #ffffff, 0 0 10px #d3d3d3;
-            animation: glow 1.5s infinite alternate;
         }
         .card:hover .card-content p {
             display: block;
+            opacity: 1;
             color: #ddd;
             text-shadow: 0 0 3px #d3d3d3;
         }
-        @keyframes glow {
-            0% { text-shadow: 0 0 5px #ffffff, 0 0 10px #d3d3d3; }
-            100% { text-shadow: 0 0 8px #ffffff, 0 0 15px #d3d3d3; }
-        }
         /* Preview section */
         .preview-section {
-            display: none;
+            opacity: 0;
             margin-top: 10px;
             padding: 5px;
             display: flex;
             justify-content: center;
             gap: 5px;
+            transition: opacity 0.3s ease 0.3s;
         }
         .card:hover .preview-section {
-            display: flex;
+            opacity: 1;
         }
         .preview-section img {
             width: 60px;
@@ -134,9 +134,9 @@
             opacity: 0;
             animation: fadeIn 0.5s forwards;
         }
-        .preview-section img:nth-child(1) { animation-delay: 0.1s; }
-        .preview-section img:nth-child(2) { animation-delay: 0.2s; }
-        .preview-section img:nth-child(3) { animation-delay: 0.3s; }
+        .preview-section img:nth-child(1) { animation-delay: 0.4s; }
+        .preview-section img:nth-child(2) { animation-delay: 0.5s; }
+        .preview-section img:nth-child(3) { animation-delay: 0.6s; }
         @keyframes fadeIn {
             to { opacity: 1; }
         }
@@ -176,7 +176,7 @@
         }
         /* Responsive */
         @media (max-width: 768px) {
-            .card-container { width: 90%; flex-direction: column; align-items: center; }
+            .card-container { width: 100%; padding: 10px; }
             .card { flex: 0 0 200px; height: 200px; }
             .card:hover { height: 270px; }
             .portfolio-title { font-size: 2rem; }
