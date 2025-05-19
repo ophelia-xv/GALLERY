@@ -6,6 +6,7 @@
     <title>Reginald</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Roboto:wght@400;700&family=Fredericka+the+Great&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -15,7 +16,6 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
             position: relative;
         }
@@ -47,6 +47,39 @@
             0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
             50% { transform: translateY(-25px) scale(1.2); opacity: 0.8; }
         }
+        /* Menu bar */
+        .menu-bar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: #2c1f1f;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1001;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .menu-bar .title {
+            color: #ffffff;
+            font-family: 'Fredericka the Great', 'Bubblegum Sans', sans-serif;
+            font-size: 2rem;
+            text-shadow: 0 0 5px #d3d3d3;
+            animation: glow 2s infinite alternate;
+        }
+        .menu-bar .icons a {
+            color: #d3d3d3;
+            font-size: 1.5rem;
+            margin-left: 15px;
+            transition: color 0.3s;
+        }
+        .menu-bar .icons a:hover {
+            color: #ffffff;
+        }
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #d3d3d3; }
+            100% { text-shadow: 0 0 10px #d3d3d3; }
+        }
         /* Card container */
         .card-container {
             display: flex;
@@ -57,6 +90,7 @@
             overflow-x: auto;
             gap: 20px;
             padding: 20px 0;
+            margin-top: 80px;
         }
         /* Category card */
         .card {
@@ -69,17 +103,20 @@
             overflow: hidden;
             position: relative;
             transform: perspective(1000px) rotateX(0deg);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, height 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .card:hover {
-            transform: perspective(1000px) rotateX(-10deg) translateZ(-20px);
-            height: 320px;
+            transform: perspective(1000px) rotateX(90deg) translateY(400px);
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6), 0 0 12px #d3d3d3;
         }
-        .card img {
+        .card img.main-image {
             width: 100%;
             height: 80%;
             object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+        .card:hover img.main-image {
+            opacity: 0;
         }
         .card-content {
             position: absolute;
@@ -88,73 +125,53 @@
             text-align: center;
             padding: 10px;
             background: rgba(0, 0, 0, 0.1);
+            transition: opacity 0.3s ease;
+        }
+        .card:hover .card-content {
+            opacity: 0;
+            display: none;
         }
         .card-content h3 {
             margin: 5px 0;
             color: #333;
             font-family: 'Bubblegum Sans', sans-serif;
             font-size: 1.4rem;
-            transition: color 0.3s ease, text-shadow 0.3s ease;
         }
         .card-content p {
             color: #555;
             font-size: 0.9rem;
-            display: none;
-            transition: opacity 0.3s ease 0.3s;
-        }
-        .card:hover .card-content h3 {
-            color: #ffffff;
-            text-shadow: 0 0 5px #ffffff, 0 0 10px #d3d3d3;
-        }
-        .card:hover .card-content p {
-            display: block;
-            opacity: 1;
-            color: #ddd;
-            text-shadow: 0 0 3px #d3d3d3;
         }
         /* Preview section */
         .preview-section {
+            position: fixed;
+            width: 250px;
+            height: 250px;
             opacity: 0;
-            margin-top: 10px;
-            padding: 5px;
             display: flex;
             justify-content: center;
-            gap: 5px;
+            align-items: center;
+            gap: 10px;
             transition: opacity 0.3s ease 0.3s;
         }
         .card:hover .preview-section {
             opacity: 1;
         }
         .preview-section img {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             object-fit: cover;
             border-radius: 5px;
             border: 1px solid #d3d3d3;
-            opacity: 0;
-            animation: fadeIn 0.5s forwards;
+            opacity: 0.8;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: hologramFlicker 2s infinite alternate;
         }
         .preview-section img:nth-child(1) { animation-delay: 0.4s; }
         .preview-section img:nth-child(2) { animation-delay: 0.5s; }
         .preview-section img:nth-child(3) { animation-delay: 0.6s; }
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-        /* Title */
-        .portfolio-title {
-            position: absolute;
-            top: 20px;
-            text-align: center;
-            width: 100%;
-            color: #ffffff;
-            font-family: 'Fredericka the Great', 'Bubblegum Sans', sans-serif;
-            font-size: 3rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            animation: glow 2s infinite alternate;
-        }
-        @keyframes glow {
-            0% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); }
-            100% { text-shadow: 2px 2px 8px #d3d3d3; }
+        @keyframes hologramFlicker {
+            0% { opacity: 0.8; box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+            100% { opacity: 0.6; box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
         }
         /* Subtle CRT effect */
         .crt::before {
@@ -176,13 +193,234 @@
         }
         /* Responsive */
         @media (max-width: 768px) {
-            .card-container { width: 100%; padding: 10px; }
+            .card-container { width: 100%; padding: 10px; margin-top: 60px; }
             .card { flex: 0 0 200px; height: 200px; }
-            .card:hover { height: 270px; }
-            .portfolio-title { font-size: 2rem; }
-            .card-content h3 { font-size: 1.2rem; }
-            .card-content p { font-size: 0.8rem; }
-            .preview-section img { width: 50px; height: 50px; }
+            .card:hover { transform: perspective(1000px) rotateX(90deg) translateY(300px); }
+            .menu-bar .title { font-size: 1.5rem; }
+            .menu-bar .icons a { font-size: 1.2rem; margin-left: 10px; }
+            .preview-section { width: 200px; height: 200px; }
+            .preview-section img { width: 60px; height: 60px; }
+        }
+    </style>
+</head>
+<body class="crt">
+    <!-- Stars and particles -->
+    <div class="star" style="left: 5%; top: 10%; animation-delay: 0s;"></div>
+    <div class="star large" style="left: 15%; top: 20%; animation-delay: 0.2s;"></div>
+    <div class="star" style="left: 25%; top: 30%; animation-delay: 0.4s;"></div>
+    <div class="star" style="left: 35%; top: 40%; animation-delay: 0.6s;"></div>
+    <div class="star large" style="left: 45%; top: 50%; animation-delay: 0.8s;"></div>
+    <div class="star" style="left: 55%; top: 60%; animation-delay: 1s;"></div>
+    <div class="star" style="left: 65%; top: 70%; animation-delay: 1.2s;"></div>
+    <div class="star large" style="left: 75%; top: 80%; animation-delay: 1.4s;"></div>
+    <div class="star" style="left: 85%; top: 15%; animation-delay: 1.6s;"></div>
+    <div classÓW
+
+System: It looks like the artifact content was cut off. Let me complete the update for your *Disney Universe*-inspired portfolio webpage, ensuring the hovered card falls back flat to the base, displays holographic previews in its original space, and moves the "Reginald" title to a menu bar with "Contact" and "About" icons. I’ll preserve all specified features and use the same `artifact_id` for continuity. Below is the complete `index.html` with the requested changes.
+
+<xaiArtifact artifact_id="e02af008-3c33-40c9-96d6-d4bcdff794fe" artifact_version_id="dedac5cd-9256-421e-9e29-c76db2d4519a" title="index.html" contentType="text/html">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reginald</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Roboto:wght@400;700&family=Fredericka+the+Great&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to bottom, #3c2f2f, #2c1f1f);
+            overflow-x: hidden;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        /* Animated stars and particles */
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+            pointer-events: none;
+        }
+        .star.large { width: 3px; height: 3px; animation-duration: 2s; }
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 5s infinite ease-in-out;
+            pointer-events: none;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+            50% { transform: translateY(-25px) scale(1.2); opacity: 0.8; }
+        }
+        /* Menu bar */
+        .menu-bar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: #2c1f1f;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1001;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .menu-bar .title {
+            color: #ffffff;
+            font-family: 'Fredericka the Great', 'Bubblegum Sans', sans-serif;
+            font-size: 2rem;
+            text-shadow: 0 0 5px #d3d3d3;
+            animation: glow 2s infinite alternate;
+        }
+        .menu-bar .icons a {
+            color: #d3d3d3;
+            font-size: 1.5rem;
+            margin-left: 15px;
+            transition: color 0.3s;
+        }
+        .menu-bar .icons a:hover {
+            color: #ffffff;
+        }
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #d3d3d3; }
+            100% { text-shadow: 0 0 10px #d3d3d3; }
+        }
+        /* Card container */
+        .card-container {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            width: 90%;
+            max-width: 1400px;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 20px 0;
+            margin-top: 80px;
+        }
+        /* Category card */
+        .card {
+            flex: 0 0 250px;
+            height: 250px;
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+            border: 3px solid #d3d3d3;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            position: relative;
+            transform: perspective(1000px) rotateX(0deg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: perspective(1000px) rotateX(90deg) translateY(400px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6), 0 0 12px #d3d3d3;
+        }
+        .card img.main-image {
+            width: 100%;
+            height: 80%;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+        .card:hover img.main-image {
+            opacity: 0;
+        }
+        .card-content {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.1);
+            transition: opacity 0.3s ease;
+        }
+        .card:hover .card-content {
+            opacity: 0;
+            display: none;
+        }
+        .card-content h3 {
+            margin: 5px 0;
+            color: #333;
+            font-family: 'Bubblegum Sans', sans-serif;
+            font-size: 1.4rem;
+        }
+        .card-content p {
+            color: #555;
+            font-size: 0.9rem;
+        }
+        /* Preview section */
+        .preview-section {
+            position: fixed;
+            width: 250px;
+            height: 250px;
+            opacity: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.3s ease 0.3s;
+        }
+        .card:hover .preview-section {
+            opacity: 1;
+        }
+        .preview-section img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #d3d3d3;
+            opacity: 0.8;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: hologramFlicker 2s infinite alternate;
+        }
+        .preview-section img:nth-child(1) { animation-delay: 0.4s; }
+        .preview-section img:nth-child(2) { animation-delay: 0.5s; }
+        .preview-section img:nth-child(3) { animation-delay: 0.6s; }
+        @keyframes hologramFlicker {
+            0% { opacity: 0.8; box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+            100% { opacity: 0.6; box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
+        }
+        /* Subtle CRT effect */
+        .crt::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.05),
+                rgba(0, 0, 0, 0.05) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .card-container { width: 100%; padding: 10px; margin-top: 60px; }
+            .card { flex: 0 0 200px; height: 200px; }
+            .card:hover { transform: perspective(1000px) rotateX(90deg) translateY(300px); }
+            .menu-bar .title { font-size: 1.5rem; }
+            .menu-bar .icons a { font-size: 1.2rem; margin-left: 10px; }
+            .preview-section { width: 200px; height: 200px; }
+            .preview-section img { width: 60px; height: 60px; }
         }
     </style>
 </head>
@@ -203,72 +441,89 @@
     <div class="particle" style="left: 60%; top: 35%; animation-delay: 2s;"></div>
     <div class="particle" style="left: 80%; top: 65%; animation-delay: 3s;"></div>
 
-    <!-- Portfolio Title -->
-    <h1 class="portfolio-title">Reginald</h1>
+    <!-- Menu Bar -->
+    <nav class="menu-bar">
+        <div class="title">Reginald</div>
+        <div class="icons">
+            <a href="#" title="Contact"><i class="fas fa-envelope"></i></a>
+            <a href="#" title="About"><i class="fas fa-info-circle"></i></a>
+        </div>
+    </nav>
 
     <!-- Card Container -->
     <div class="card-container">
         <!-- Category Cards -->
-        <div class="card">
-            <img src="https://via.placeholder.com/250x200?text=3D+Models" alt="3D Models">
+        <div class="card" data-index="0">
+            <img src="https://via.placeholder.com/250x200?text=3D+Models" alt="3D Models" class="main-image">
             <div class="card-content">
                 <h3>3D Models</h3>
                 <p>Collection of 3D models crafted in Blender and Maya, ranging from low-poly characters to detailed environments, optimized for games and animations.</p>
-                <div class="preview-section">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+1" alt="Preview 1">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+2" alt="Preview 2">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+3" alt="Preview 3">
-                </div>
+            </div>
+            <div class="preview-section">
+                <img src="https://via.placeholder.com/80x80?text=Preview+1" alt="Preview 1">
+                <img src="https://via.placeholder.com/80x80?text=Preview+2" alt="Preview 2">
+                <img src="https://via.placeholder.com/80x80?text=Preview+3" alt="Preview 3">
             </div>
         </div>
-        <div class="card">
-            <img src="https://via.placeholder.com/250x200?text=2D+Art" alt="2D Art">
+        <div class="card" data-index="1">
+            <img src="https://via.placeholder.com/250x200?text=2D+Art" alt="2D Art" class="main-image">
             <div class="card-content">
                 <h3>2D Art</h3>
                 <p>Original 2D artwork created in Photoshop and Aseprite, including pixel art, concept sketches, and illustrations for games and personal projects.</p>
-                <div class="preview-section">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+1" alt="Preview 1">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+2" alt="Preview 2">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+3" alt="Preview 3">
-                </div>
+            </div>
+            <div class="preview-section">
+                <img src="https://via.placeholder.com/80x80?text=Preview+1" alt="Preview 1">
+                <img src="https://via.placeholder.com/80x80?text=Preview+2" alt="Preview 2">
+                <img src="https://via.placeholder.com/80x80?text=Preview+3" alt="Preview 3">
             </div>
         </div>
-        <div class="card">
-            <img src="https://via.placeholder.com/250x200?text=Games" alt="Games">
+        <div class="card" data-index="2">
+            <img src="https://via.placeholder.com/250x200?text=Games" alt="Games" class="main-image">
             <div class="card-content">
                 <h3>Games</h3>
                 <p>Indie games developed in Unity and Godot, featuring custom mechanics, retro-inspired art, and prototypes from game jams and personal experiments.</p>
-                <div class="preview-section">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+1" alt="Preview 1">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+2" alt="Preview 2">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+3" alt="Preview 3">
-                </div>
+            </div>
+            <div class="preview-section">
+                <img src="https://via.placeholder.com/80x80?text=Preview+1" alt="Preview 1">
+                <img src="https://via.placeholder.com/80x80?text=Preview+2" alt="Preview 2">
+                <img src="https://via.placeholder.com/80x80?text=Preview+3" alt="Preview 3">
             </div>
         </div>
-        <div class="card">
-            <img src="https://via.placeholder.com/250x200?text=Websites" alt="Websites">
+        <div class="card" data-index="3">
+            <img src="https://via.placeholder.com/250x200?text=Websites" alt="Websites" class="main-image">
             <div class="card-content">
                 <h3>Websites</h3>
                 <p>Responsive websites built with HTML, CSS, and JavaScript, utilizing frameworks like Tailwind CSS and React for dynamic, user-friendly interfaces.</p>
-                <div class="preview-section">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+1" alt="Preview 1">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+2" alt="Preview 2">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+3" alt="Preview 3">
-                </div>
+            </div>
+            <div class="preview-section">
+                <img src="https://via.placeholder.com/80x80?text=Preview+1" alt="Preview 1">
+                <img src="https://via.placeholder.com/80x80?text=Preview+2" alt="Preview 2">
+                <img src="https://via.placeholder.com/80x80?text=Preview+3" alt="Preview 3">
             </div>
         </div>
-        <div class="card">
-            <img src="https://via.placeholder.com/250x200?text=Misc" alt="Misc">
+        <div class="card" data-index="4">
+            <img src="https://via.placeholder.com/250x200?text=Misc" alt="Misc" class="main-image">
             <div class="card-content">
                 <h3>Misc</h3>
                 <p>Experimental projects including animations, short films, and mods, created with tools like After Effects and Unreal Engine for creative exploration.</p>
-                <div class="preview-section">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+1" alt="Preview 1">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+2" alt="Preview 2">
-                    <img src="https://via.placeholder.com/60x60?text=Preview+3" alt="Preview 3">
-                </div>
+            </div>
+            <div class="preview-section">
+                <img src="https://via.placeholder.com/80x80?text=Preview+1" alt="Preview 1">
+                <img src="https://via.placeholder.com/80x80?text=Preview+2" alt="Preview 2">
+                <img src="https://via.placeholder.com/80x80?text=Preview+3" alt="Preview 3">
             </div>
         </div>
     </div>
+
+    <script>
+        // Position preview sections in the card's original space
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            const rect = card.getBoundingClientRect();
+            const preview = card.querySelector('.preview-section');
+            preview.style.top = `${rect.top + window.scrollY}px`;
+            preview.style.left = `${rect.left + window.scrollX}px`;
+        });
+    </script>
 </body>
 </html>
