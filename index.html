@@ -1,69 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Green Cube Scroll</title>
+  <meta charset="UTF-8" />
+  <title>Ophelia Menu</title>
   <style>
     body {
       margin: 0;
-      background-color: #f5f0e1; /* Beige BG */
+      background-color: #f5f0e1; /* Cream background */
       font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
     }
 
     #cube-container {
       display: flex;
-      justify-content: center;
-      align-items: flex-end;
       gap: 20px;
-      transition: transform 0.3s ease;
+      align-items: center;
+      transition: all 0.4s ease;
     }
 
     .cube {
       width: 100px;
       height: 100px;
-      background-color: #064e3b; /* Dark green */
+      border-radius: 16px;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      color: #032d1f; /* Darker green for icons */
-      font-size: 32px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25); /* Cube shadow */
+      color: #fff;
+      font-size: 30px;
       cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      transition: all 0.4s ease;
       position: relative;
-      transition: all 0.3s ease;
     }
 
-    .cube:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35); /* Hover shadow */
-    }
-
-    .cube.center {
-      transform: scale(1.2);
-      animation: bounce 2s infinite ease-in-out;
-      z-index: 5;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: scale(1.2) translateY(0); }
-      50% { transform: scale(1.25) translateY(-10px); }
-    }
-
-    .label {
+    .cube .label {
       position: absolute;
       bottom: 110%;
-      background: #064e3b;
+      background-color: #064e3b;
       color: white;
-      padding: 5px 10px;
+      padding: 4px 10px;
       border-radius: 8px;
       font-size: 14px;
-      white-space: nowrap;
       opacity: 0;
       transition: opacity 0.3s ease;
       pointer-events: none;
@@ -72,70 +54,75 @@
     .cube.center:hover .label {
       opacity: 1;
     }
+
+    .cube.shadow {
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .cube.pos-0 {
+      background-color: #032d1f; transform: scale(0.8);
+    }
+    .cube.pos-1 {
+      background-color: #043a2b; transform: scale(0.9);
+    }
+    .cube.center {
+      background-color: #064e3b; transform: scale(1.1);
+      z-index: 2;
+    }
+    .cube.pos-3 {
+      background-color: #043a2b; transform: scale(0.9);
+    }
+    .cube.pos-4 {
+      background-color: #032d1f; transform: scale(0.8);
+    }
   </style>
 </head>
 <body>
   <div id="cube-container"></div>
 
   <script>
-    const menuItems = [
-      { icon: "🏠", label: "Home" },
-      { icon: "📁", label: "Files" },
-      { icon: "⚙️", label: "Settings" },
-      { icon: "📞", label: "Contact" },
-      { icon: "📊", label: "Stats" },
-      { icon: "📷", label: "Gallery" },
-      { icon: "🛒", label: "Shop" }
+    const menuData = [
+      { icon: "👤", label: "ABOUT" },
+      { icon: "🗿", label: "MODELS" },
+      { icon: "🎨", label: "SKETCHBOOK" },
+      { icon: "📦", label: "OTHERS" },
+      { icon: "✉️", label: "CONTACT" }
     ];
 
-    const layout = [-2, -1, 0, 1, 2];
-    let centerIndex = 2;
-    let cubes = [];
+    const container = document.getElementById("cube-container");
+    let centerIndex = 2; // Start with SKETCHBOOK
 
-    const container = document.getElementById('cube-container');
+    function renderCubes() {
+      container.innerHTML = "";
+      menuData.forEach((item, i) => {
+        const cube = document.createElement("div");
+        const posClass = getPositionClass(i);
+        cube.className = `cube ${posClass}`;
+        cube.innerHTML = `
+          <div>${item.icon}</div>
+          ${i === centerIndex ? `<div class="label">${item.label}</div>` : ""}
+        `;
 
-    function createCube(item, offset) {
-      const cube = document.createElement('div');
-      cube.classList.add('cube');
-      if (offset === 0) cube.classList.add('center');
-
-      cube.innerHTML = `
-        <div>${item.icon}</div>
-        ${offset === 0 ? `<div class="label">${item.label}</div>` : ""}
-      `;
-
-      cube.style.transform = `translateX(${offset * 110}px)`;
-
-      cube.addEventListener('mouseenter', () => {
-        if (offset !== 0) {
-          setTimeout(() => {
-            centerIndex = (menuItems.indexOf(item));
-            updateCubes();
-          }, 400);
+        if (i !== centerIndex) {
+          cube.addEventListener("mouseenter", () => {
+            setTimeout(() => {
+              centerIndex = i;
+              renderCubes();
+            }, 300); // scroll delay
+          });
         }
-      });
 
-      cube.addEventListener('click', () => {
-        alert(`Clicked on ${item.label}`);
-      });
-
-      return cube;
-    }
-
-    function updateCubes() {
-      container.innerHTML = '';
-      cubes = [];
-
-      for (let i = -2; i <= 2; i++) {
-        const idx = (centerIndex + i + menuItems.length) % menuItems.length;
-        const cube = createCube(menuItems[idx], i);
         container.appendChild(cube);
-        cubes.push(cube);
-      }
+      });
     }
 
-    // First render
-    updateCubes();
+    function getPositionClass(i) {
+      const diff = i - centerIndex;
+      if (diff === 0) return "center";
+      return `pos-${Math.abs(diff)}`;
+    }
+
+    renderCubes();
   </script>
 </body>
 </html>
