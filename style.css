@@ -1,66 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
-body {
+* {
+  box-sizing: border-box;
+}
+
+body, html {
   margin: 0;
-  padding: 0;
+  height: 100%;
+  background: radial-gradient(ellipse at bottom, #0a0a0a, #000000);
   font-family: 'Orbitron', sans-serif;
-  background: radial-gradient(ellipse at bottom, #0a0a0a, #000);
-  overflow: hidden;
   color: #fff;
-  text-align: center;
-}
-
-.title {
-  font-size: 4rem;
-  margin-top: 50px;
-  color: #fff;
-  text-shadow: 0 0 10px #8e44ad;
-}
-
-.subtitle {
-  font-size: 1.2rem;
-  margin-bottom: 40px;
-  color: #aaa;
-}
-
-.menu {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  padding: 20px;
-}
-
-.block {
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid #8e44ad;
-  border-radius: 20px;
-  padding: 30px 40px;
-  font-size: 1.2rem;
-  color: #fff;
-  text-decoration: none;
-  box-shadow: 0 0 20px #8e44ad88;
-  transition: transform 0.3s ease, box-shadow 0.3s;
-  animation: bounceIn 1s ease forwards;
-}
-
-.block:hover {
-  transform: translateY(-10px) scale(1.05) rotate(-1deg);
-  box-shadow: 0 0 30px #e91e63aa;
-}
-
-@keyframes bounceIn {
-  0% {
-    transform: scale(0.3) translateY(-200px);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(1.1) translateY(30px);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1) translateY(0);
-  }
+  overflow-x: hidden;
+  overflow-y: hidden;
+  user-select: none;
 }
 
 .stars-bg {
@@ -68,14 +20,106 @@ body {
   top: 0; left: 0;
   width: 100vw;
   height: 100vh;
-  background: url('https://raw.githubusercontent.com/JulianGarnier/particles.js/master/demo/media/stars.png');
-  background-size: cover;
-  opacity: 0.05;
+  background: url('https://raw.githubusercontent.com/JulianGarnier/particles.js/master/demo/media/stars.png') repeat;
+  background-size: 200px 200px;
+  opacity: 0.1;
+  animation: moveStars 60s linear infinite;
   z-index: -1;
-  animation: floatStars 60s linear infinite;
 }
 
-@keyframes floatStars {
+@keyframes moveStars {
   0% { background-position: 0 0; }
   100% { background-position: 1000px 1000px; }
+}
+
+.menu-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  position: relative;
+}
+
+.block-group {
+  display: flex;
+  gap: 60px;
+}
+
+.block {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ddd;
+  cursor: pointer;
+  border-radius: 16px;
+  padding: 1.6rem 2.8rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 3px;
+  user-select: none;
+  background: linear-gradient(145deg, #3a0f44, #1b0226);
+  box-shadow:
+    0 0 15px #8e44adaa,
+    inset 0 0 10px #e91e63cc;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, color 0.35s ease;
+  animation: floatBounce 3s ease-in-out infinite;
+  min-width: 130px;
+  min-height: 130px;
+  font-size: 1.25rem;
+  text-align: center;
+  perspective: 1000px;
+}
+
+.block.big {
+  min-width: 220px;
+  min-height: 220px;
+  font-size: 1.75rem;
+  border-radius: 32px;
+  font-weight: 800;
+  letter-spacing: 5px;
+  box-shadow:
+    0 0 25px #d6009a,
+    inset 0 0 15px #f81ab0;
+  animation-duration: 3.5s;
+}
+
+.block.block-edge {
+  min-width: 140px;
+  min-height: 140px;
+  font-size: 1.3rem;
+  border-radius: 24px;
+  box-shadow:
+    0 0 20px #721575aa,
+    inset 0 0 10px #d9007dcc;
+  animation-duration: 2.5s;
+}
+
+.block.block-edge.left {
+  transform-origin: left center;
+}
+
+.block.block-edge.right {
+  transform-origin: right center;
+}
+
+.block:hover {
+  transform: translateY(-20px) rotateX(10deg) rotateY(15deg) scale(1.1);
+  box-shadow:
+    0 0 50px #ff3ab6,
+    inset 0 0 30px #ff7aff;
+  color: #fff;
+  transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 2;
+}
+
+/* Bouncing animation */
+@keyframes floatBounce {
+  0%, 100% {
+    transform: translateY(0) rotateX(0) rotateY(0);
+  }
+  50% {
+    transform: translateY(-20px) rotateX(5deg) rotateY(7deg);
+  }
 }
