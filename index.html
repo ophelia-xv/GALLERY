@@ -1,128 +1,522 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Ophelia Menu</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disney Universe Menu Clone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      margin: 0;
-      background-color: #f5f0e1; /* Cream background */
-      font-family: 'Segoe UI', sans-serif;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
+    /* Disney Universe Color Palette */
+    :root {
+      --bg-dark: #1a0f0a;
+      --bg-light: #2b1a0f;
+      --cube-blue: #3a5c83;
+      --cube-light: #4a7ca8;
+      --cube-dark: #2a4a6d;
+      --gold: #ffd700;
+      --particle: rgba(255, 215, 0, 0.7);
+      --shadow: rgba(0, 0, 0, 0.6);
     }
 
-    #cube-container {
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(ellipse at center, var(--bg-light), var(--bg-dark));
+      font-family: 'Arial', sans-serif;
+      height: 100vh;
       display: flex;
-      gap: 20px;
+      justify-content: center;
       align-items: center;
-      transition: all 0.4s ease;
+      overflow: hidden;
+      perspective: 1800px;
+    }
+
+    /* Background Elements */
+    .stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.2; }
+      100% { opacity: 1; }
+    }
+
+    /* Main Menu Container */
+    .disney-menu {
+      position: relative;
+      width: 100%;
+      height: 70vh;
+      max-width: 1200px;
+      margin: 0 auto;
+      z-index: 10;
+    }
+
+    /* Cube Track */
+    .cube-track {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      height: 100%;
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* 3D Cube */
+    .cube-wrapper {
+      width: 200px;
+      height: 200px;
+      margin: 0 5px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      flex-shrink: 0;
     }
 
     .cube {
-      width: 100px;
-      height: 100px;
-      border-radius: 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
-      font-size: 30px;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      transition: all 0.4s ease;
+      width: 100%;
+      height: 100%;
       position: relative;
+      transform-style: preserve-3d;
+      transition: inherit;
+      animation: float 4s ease-in-out infinite;
     }
 
-    .cube .label {
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+      50% { transform: translateY(-20px) rotateX(5deg) rotateY(5deg); }
+    }
+
+    .cube-face {
       position: absolute;
-      bottom: 110%;
-      background-color: #064e3b;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--cube-blue), var(--cube-light));
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
       color: white;
-      padding: 4px 10px;
+      font-size: 4.5rem;
+      box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.4);
+      backface-visibility: hidden;
       border-radius: 8px;
-      font-size: 14px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
+    }
+
+    .cube-face.front { transform: translateZ(100px); }
+    .cube-face.back { transform: rotateY(180deg) translateZ(100px); background: var(--cube-dark); }
+    .cube-face.right { transform: rotateY(90deg) translateZ(100px); background: #31557a; }
+    .cube-face.left { transform: rotateY(-90deg) translateZ(100px); background: #31557a; }
+    .cube-face.top { transform: rotateX(90deg) translateZ(100px); background: var(--cube-light); }
+    .cube-face.bottom { transform: rotateX(-90deg) translateZ(100px); background: #1f3a5a; }
+
+    /* Disney Gold Border Effect */
+    .cube-face::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      background: linear-gradient(45deg, transparent, var(--gold), transparent) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
       pointer-events: none;
     }
 
-    .cube.center:hover .label {
-      opacity: 1;
+    /* Floating Shadow */
+    .cube-shadow {
+      position: absolute;
+      bottom: -40px;
+      left: 10%;
+      width: 80%;
+      height: 30px;
+      background: var(--shadow);
+      border-radius: 50%;
+      filter: blur(30px);
+      opacity: 0.8;
+      transition: all 0.4s ease;
+      z-index: -1;
+      animation: shadow-pulse 4s ease-in-out infinite;
     }
 
-    .cube.shadow {
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    @keyframes shadow-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 0.8; }
     }
 
-    .cube.pos-0 {
-      background-color: #032d1f; transform: scale(0.8);
+    /* Cube Positions */
+    .cube-wrapper.left-2 {
+      transform: translateX(-380px) scale(0.6) rotateY(25deg);
+      opacity: 0.4;
+      z-index: 1;
+      animation-delay: 0.1s;
     }
-    .cube.pos-1 {
-      background-color: #043a2b; transform: scale(0.9);
-    }
-    .cube.center {
-      background-color: #064e3b; transform: scale(1.1);
+    .cube-wrapper.left-1 {
+      transform: translateX(-190px) scale(0.8) rotateY(15deg);
+      opacity: 0.7;
       z-index: 2;
+      animation-delay: 0.2s;
     }
-    .cube.pos-3 {
-      background-color: #043a2b; transform: scale(0.9);
+    .cube-wrapper.center {
+      transform: translateX(0) scale(1);
+      z-index: 3;
     }
-    .cube.pos-4 {
-      background-color: #032d1f; transform: scale(0.8);
+    .cube-wrapper.center .cube {
+      animation: center-float 4s ease-in-out infinite;
+    }
+    @keyframes center-float {
+      0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+      50% { transform: translateY(-30px) rotateX(8deg) rotateY(8deg); }
+    }
+    .cube-wrapper.right-1 {
+      transform: translateX(190px) scale(0.8) rotateY(-15deg);
+      opacity: 0.7;
+      z-index: 2;
+      animation-delay: 0.2s;
+    }
+    .cube-wrapper.right-2 {
+      transform: translateX(380px) scale(0.6) rotateY(-25deg);
+      opacity: 0.4;
+      z-index: 1;
+      animation-delay: 0.1s;
+    }
+
+    /* Label */
+    .cube-label {
+      position: absolute;
+      bottom: -70px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(to right, var(--cube-blue), var(--cube-light));
+      color: white;
+      padding: 12px 25px;
+      border-radius: 30px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      white-space: nowrap;
+      box-shadow: 0 8px 25px var(--shadow);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .cube-wrapper.center .cube-label {
+      opacity: 1;
+      animation: label-glow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes label-glow {
+      0% { box-shadow: 0 8px 25px var(--shadow); }
+      100% { box-shadow: 0 8px 35px var(--cube-light); }
+    }
+
+    /* Disney Particles */
+    .particle {
+      position: absolute;
+      background: var(--particle);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 5;
+      animation: particle-float 3s ease-out forwards;
+    }
+    
+    @keyframes particle-float {
+      0% { transform: translate(0, 0) scale(0); opacity: 1; }
+      100% { transform: translate(var(--tx), var(--ty)) scale(1); opacity: 0; }
+    }
+
+    /* Navigation Zones */
+    .nav-zone {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 30%;
+      z-index: 20;
+      cursor: pointer;
+    }
+    
+    .nav-zone.left {
+      left: 0;
+      background: linear-gradient(90deg, rgba(26, 15, 10, 0.5), transparent);
+    }
+    
+    .nav-zone.right {
+      right: 0;
+      background: linear-gradient(270deg, rgba(26, 15, 10, 0.5), transparent);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .cube-wrapper { width: 180px; height: 180px; }
+      .cube-face { font-size: 4rem; }
+      .cube-face.front { transform: translateZ(90px); }
+      /* Other face translations adjusted proportionally */
+    }
+    
+    @media (max-width: 992px) {
+      .cube-wrapper { width: 160px; height: 160px; }
+      .cube-face { font-size: 3.5rem; }
+    }
+    
+    @media (max-width: 768px) {
+      .cube-wrapper { width: 140px; height: 140px; }
+      .cube-face { font-size: 3rem; }
+      .cube-label { font-size: 1.2rem; }
+    }
+    
+    @media (max-width: 576px) {
+      .cube-wrapper { width: 120px; height: 120px; }
+      .cube-face { font-size: 2.5rem; }
+      .cube-label { font-size: 1rem; }
+    }
+    
+    @media (max-width: 400px) {
+      .cube-wrapper { width: 100px; height: 100px; }
+      .cube-face { font-size: 2rem; }
     }
   </style>
 </head>
 <body>
-  <div id="cube-container"></div>
+  <!-- Starfield Background -->
+  <div class="stars" id="stars"></div>
+  
+  <!-- Main Menu -->
+  <div class="disney-menu">
+    <div class="nav-zone left"></div>
+    <div class="cube-track" id="cube-track"></div>
+    <div class="nav-zone right"></div>
+  </div>
 
   <script>
+    // Disney Universe Menu Data
     const menuData = [
-      { icon: "👤", label: "ABOUT" },
-      { icon: "🗿", label: "MODELS" },
-      { icon: "🎨", label: "SKETCHBOOK" },
-      { icon: "📦", label: "OTHERS" },
-      { icon: "✉️", label: "CONTACT" }
+      { icon: '<i class="fas fa-user"></i>', label: "About" },
+      { icon: '<i class="fas fa-cube"></i>', label: "Models" },
+      { icon: '<i class="fas fa-palette"></i>', label: "Sketchbook" },
+      { icon: '<i class="fas fa-box-open"></i>', label: "Extras" },
+      { icon: '<i class="fas fa-envelope"></i>', label: "Contact" }
     ];
+    
+    // DOM Elements
+    const track = document.getElementById('cube-track');
+    const starsContainer = document.getElementById('stars');
+    let currentIndex = 2;
+    let isAnimating = false;
+    let hoverTimeout;
+    let particlesInterval;
 
-    const container = document.getElementById("cube-container");
-    let centerIndex = 2; // Start with SKETCHBOOK
+    // Initialize
+    createStars();
+    renderCubes();
+    setupNavigation();
+    startParticles();
 
+    // Create starfield background
+    function createStars() {
+      for (let i = 0; i < 200; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.width = `${Math.random() * 3}px`;
+        star.style.height = star.style.width;
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.animationDelay = `${Math.random() * 3}s`;
+        starsContainer.appendChild(star);
+      }
+    }
+
+    // Render 3D cubes
     function renderCubes() {
-      container.innerHTML = "";
-      menuData.forEach((item, i) => {
-        const cube = document.createElement("div");
-        const posClass = getPositionClass(i);
-        cube.className = `cube ${posClass}`;
-        cube.innerHTML = `
-          <div>${item.icon}</div>
-          ${i === centerIndex ? `<div class="label">${item.label}</div>` : ""}
+      track.innerHTML = '';
+      
+      // Create visible cubes (-2 to +2 from center)
+      for (let i = -2; i <= 2; i++) {
+        const dataIndex = currentIndex + i;
+        if (dataIndex < 0 || dataIndex >= menuData.length) continue;
+        
+        const wrapper = document.createElement('div');
+        wrapper.className = `cube-wrapper ${getPositionClass(i)}`;
+        
+        const cube = document.createElement('div');
+        cube.className = 'cube';
+        
+        // Create all 6 faces of the cube
+        ['front', 'back', 'right', 'left', 'top', 'bottom'].forEach(face => {
+          const faceEl = document.createElement('div');
+          faceEl.className = `cube-face ${face}`;
+          if (face === 'front') faceEl.innerHTML = menuData[dataIndex].icon;
+          cube.appendChild(faceEl);
+        });
+        
+        wrapper.innerHTML = `
+          ${cube.outerHTML}
+          <div class="cube-shadow"></div>
+          <div class="cube-label">${menuData[dataIndex].label}</div>
         `;
-
-        if (i !== centerIndex) {
-          cube.addEventListener("mouseenter", () => {
-            setTimeout(() => {
-              centerIndex = i;
-              renderCubes();
-            }, 300); // scroll delay
-          });
+        
+        track.appendChild(wrapper);
+      }
+      
+      // Create golden particles around center cube
+      createCenterParticles();
+    }
+    
+    function getPositionClass(offset) {
+      if (offset === 0) return 'center';
+      return offset < 0 ? `left-${Math.abs(offset)}` : `right-${offset}`;
+    }
+    
+    // Navigation setup
+    function setupNavigation() {
+      const leftZone = document.querySelector('.nav-zone.left');
+      const rightZone = document.querySelector('.nav-zone.right');
+      
+      // Mouse hover navigation
+      leftZone.addEventListener('mouseenter', () => startHover(-1));
+      rightZone.addEventListener('mouseenter', () => startHover(1));
+      
+      leftZone.addEventListener('mouseleave', stopHover);
+      rightZone.addEventListener('mouseleave', stopHover);
+      
+      // Touch navigation
+      let touchStartX = 0;
+      
+      track.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+      });
+      
+      track.addEventListener('touchmove', (e) => {
+        const touchX = e.touches[0].clientX;
+        const diff = touchStartX - touchX;
+        
+        if (Math.abs(diff) > 50) {
+          navigate(diff > 0 ? 1 : -1);
+          touchStartX = touchX;
         }
-
-        container.appendChild(cube);
+      });
+      
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') navigate(-1);
+        if (e.key === 'ArrowRight') navigate(1);
       });
     }
-
-    function getPositionClass(i) {
-      const diff = i - centerIndex;
-      if (diff === 0) return "center";
-      return `pos-${Math.abs(diff)}`;
+    
+    function startHover(direction) {
+      clearTimeout(hoverTimeout);
+      hoverTimeout = setTimeout(() => {
+        navigate(direction);
+        startHover(direction); // Continue navigating while hovered
+      }, 500);
     }
-
-    renderCubes();
+    
+    function stopHover() {
+      clearTimeout(hoverTimeout);
+    }
+    
+    function navigate(direction) {
+      if (isAnimating) return;
+      
+      const newIndex = currentIndex + direction;
+      if (newIndex < 0 || newIndex >= menuData.length) return;
+      
+      isAnimating = true;
+      currentIndex = newIndex;
+      
+      // Animate track
+      track.style.transform = `translate(calc(-50% + ${direction * 60}px), -50%)`;
+      track.style.opacity = '0.8';
+      
+      setTimeout(() => {
+        track.style.transition = 'none';
+        track.style.transform = 'translate(-50%, -50%)';
+        track.style.opacity = '1';
+        
+        // Force reflow
+        void track.offsetWidth;
+        
+        track.style.transition = 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
+        renderCubes();
+        isAnimating = false;
+      }, 800);
+    }
+    
+    // Particle Effects
+    function startParticles() {
+      particlesInterval = setInterval(createRandomParticles, 2000);
+    }
+    
+    function createRandomParticles() {
+      for (let i = 0; i < 5; i++) {
+        createParticle(
+          window.innerWidth * Math.random(),
+          window.innerHeight * Math.random()
+        );
+      }
+    }
+    
+    function createCenterParticles() {
+      const centerCube = document.querySelector('.cube-wrapper.center');
+      if (!centerCube) return;
+      
+      const rect = centerCube.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      for (let i = 0; i < 10; i++) {
+        setTimeout(() => {
+          createParticle(centerX, centerY);
+        }, i * 150);
+      }
+    }
+    
+    function createParticle(x, y) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      
+      // Random size and position
+      const size = Math.random() * 8 + 4;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.left = `${x}px`;
+      particle.style.top = `${y}px`;
+      
+      // Random movement
+      const angle = Math.random() * Math.PI * 2;
+      const distance = Math.random() * 100 + 50;
+      particle.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+      particle.style.setProperty('--ty', `${Math.sin(angle) * distance - 50}px`);
+      
+      document.body.appendChild(particle);
+      
+      // Remove after animation
+      setTimeout(() => {
+        particle.remove();
+      }, 3000);
+    }
   </script>
 </body>
 </html>
