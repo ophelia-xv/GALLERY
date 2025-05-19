@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: radial-gradient(ellipse at bottom, #0a0a0a, #000);
+  overflow: hidden;
+  color: #fff;
+  text-align: center;
+}
+
+.title {
+  font-size: 4rem;
+  margin-top: 50px;
+  color: #fff;
+  text-shadow: 0 0 10px #8e44ad;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  color: #aaa;
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.block {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid #8e44ad;
+  border-radius: 20px;
+  padding: 30px 40px;
+  font-size: 1.2rem;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 0 20px #8e44ad88;
+  transition: transform 0.3s ease, box-shadow 0.3s;
+  animation: bounceIn 1s ease forwards;
+}
+
+.block:hover {
+  transform: translateY(-10px) scale(1.05) rotate(-1deg);
+  box-shadow: 0 0 30px #e91e63aa;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3) translateY(-200px);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1) translateY(30px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+.stars-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url('https://raw.githubusercontent.com/JulianGarnier/particles.js/master/demo/media/stars.png');
+  background-size: cover;
+  opacity: 0.05;
+  z-index: -1;
+  animation: floatStars 60s linear infinite;
+}
+
+@keyframes floatStars {
+  0% { background-position: 0 0; }
+  100% { background-position: 1000px 1000px; }
+}
