@@ -16,6 +16,7 @@
       --gold: #ffd700;
       --particle: rgba(255, 215, 0, 0.7);
       --shadow: rgba(0, 0, 0, 0.6);
+      --cube-size: 200px;
     }
 
     * {
@@ -33,6 +34,7 @@
       align-items: center;
       overflow: hidden;
       perspective: 1800px;
+      perspective-origin: 50% 50%;
     }
 
     /* Background Elements */
@@ -79,10 +81,14 @@
       transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
+    .cube-track.navigating {
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
     /* 3D Cube */
     .cube-wrapper {
-      width: 200px;
-      height: 200px;
+      width: var(--cube-size);
+      height: var(--cube-size);
       margin: 0 5px;
       position: relative;
       transform-style: preserve-3d;
@@ -105,7 +111,7 @@
     }
 
     .cube-face {
-      position: absolute;
+      position: absolute DMF;
       width: 100%;
       height: 100%;
       background: linear-gradient(135deg, var(--cube-blue), var(--cube-light));
@@ -120,12 +126,12 @@
       border-radius: 8px;
     }
 
-    .cube-face.front { transform: translateZ(100px); }
-    .cube-face.back { transform: rotateY(180deg) translateZ(100px); background: var(--cube-dark); }
-    .cube-face.right { transform: rotateY(90deg) translateZ(100px); background: #31557a; }
-    .cube-face.left { transform: rotateY(-90deg) translateZ(100px); background: #31557a; }
-    .cube-face.top { transform: rotateX(90deg) translateZ(100px); background: var(--cube-light); }
-    .cube-face.bottom { transform: rotateX(-90deg) translateZ(100px); background: #1f3a5a; }
+    .cube-face.front { transform: translateZ(calc(var(--cube-size) / 2)); }
+    .cube-face.back { transform: rotateY(180deg) translateZ(calc(var(--cube-size) / 2)); background: var(--cube-dark); }
+    .cube-face.right { transform: rotateY(90deg) translateZ(calc(var(--cube-size) / 2)); background: #31557a; }
+    .cube-face.left { transform: rotateY(-90deg) translateZ(calc(var(--cube-size) / 2)); background: #31557a; }
+    .cube-face.top { transform: rotateX(90deg) translateZ(calc(var(--cube-size) / 2)); background: var(--cube-light); }
+    .cube-face.bottom { transform: rotateX(-90deg) translateZ(calc(var(--cube-size) / 2)); background: #1f3a5a; }
 
     /* Disney Gold Border Effect */
     .cube-face::after {
@@ -165,21 +171,21 @@
       50% { transform: scale(1.2); opacity: 0.8; }
     }
 
-    /* Cube Positions */
-    .cube-wrapper.left-2 {
-      transform: translateX(-380px) scale(0.6) rotateY(25deg);
-      opacity: 0.4;
+    /* Cube Positions for 1-Point Perspective */
+    .cube-wrapper.z-minus-2 {
+      transform: translateZ(-800px) scale(0.5);
+      opacity: 0.3;
       z-index: 1;
       animation-delay: 0.1s;
     }
-    .cube-wrapper.left-1 {
-      transform: translateX(-190px) scale(0.8) rotateY(15deg);
-      opacity: 0.7;
+    .cube-wrapper.z-minus-1 {
+      transform: translateZ(-400px) scale(0.75);
+      opacity: 0.6;
       z-index: 2;
       animation-delay: 0.2s;
     }
     .cube-wrapper.center {
-      transform: translateX(0) scale(1);
+      transform: translateZ(0) scale(1);
       z-index: 3;
     }
     .cube-wrapper.center .cube {
@@ -189,15 +195,15 @@
       0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
       50% { transform: translateY(-30px) rotateX(8deg) rotateY(8deg); }
     }
-    .cube-wrapper.right-1 {
-      transform: translateX(190px) scale(0.8) rotateY(-15deg);
-      opacity: 0.7;
+    .cube-wrapper.z-plus-1 {
+      transform: translateZ(-400px) scale(0.75);
+      opacity: 0.6;
       z-index: 2;
       animation-delay: 0.2s;
     }
-    .cube-wrapper.right-2 {
-      transform: translateX(380px) scale(0.6) rotateY(-25deg);
-      opacity: 0.4;
+    .cube-wrapper.z-plus-2 {
+      transform: translateZ(-800px) scale(0.5);
+      opacity: 0.3;
       z-index: 1;
       animation-delay: 0.1s;
     }
@@ -270,32 +276,40 @@
 
     /* Responsive Design */
     @media (max-width: 1200px) {
-      .cube-wrapper { width: 180px; height: 180px; }
+      :root { --cube-size: 180px; }
       .cube-face { font-size: 4rem; }
-      .cube-face.front { transform: translateZ(90px); }
-      /* Other face translations adjusted proportionally */
+      .cube-wrapper.z-minus-2, .cube-wrapper.z-plus-2 { transform: translateZ(-720px) scale(0.5); }
+      .cube-wrapper.z-minus-1, .cube-wrapper.z-plus-1 { transform: translateZ(-360px) scale(0.75); }
     }
     
     @media (max-width: 992px) {
-      .cube-wrapper { width: 160px; height: 160px; }
+      :root { --cube-size: 160px; }
       .cube-face { font-size: 3.5rem; }
+      .cube-wrapper.z-minus-2, .cube-wrapper.z-plus-2 { transform: translateZ(-640px) scale(0.5); }
+      .cube-wrapper.z-minus-1, .cube-wrapper.z-plus-1 { transform: translateZ(-320px) scale(0.75); }
     }
     
     @media (max-width: 768px) {
-      .cube-wrapper { width: 140px; height: 140px; }
+      :root { --cube-size: 140px; }
       .cube-face { font-size: 3rem; }
       .cube-label { font-size: 1.2rem; }
+      .cube-wrapper.z-minus-2, .cube-wrapper.z-plus-2 { transform: translateZ(-560px) scale(0.5); }
+      .cube-wrapper.z-minus-1, .cube-wrapper.z-plus-1 { transform: translateZ(-280px) scale(0.75); }
     }
     
     @media (max-width: 576px) {
-      .cube-wrapper { width: 120px; height: 120px; }
+      :root { --cube-size: 120px; }
       .cube-face { font-size: 2.5rem; }
       .cube-label { font-size: 1rem; }
+      .cube-wrapper.z-minus-2, .cube-wrapper.z-plus-2 { transform: translateZ(-480px) scale(0.5); }
+      .cube-wrapper.z-minus-1, .cube-wrapper.z-plus-1 { transform: translateZ(-240px) scale(0.75); }
     }
     
     @media (max-width: 400px) {
-      .cube-wrapper { width: 100px; height: 100px; }
+      :root { --cube-size: 100px; }
       .cube-face { font-size: 2rem; }
+      .cube-wrapper.z-minus-2, .cube-wrapper.z-plus-2 { transform: translateZ(-400px) scale(0.5); }
+      .cube-wrapper.z-minus-1, .cube-wrapper.z-plus-1 { transform: translateZ(-200px) scale(0.75); }
     }
   </style>
 </head>
@@ -305,9 +319,9 @@
   
   <!-- Main Menu -->
   <div class="disney-menu">
-    <div class="nav-zone left"></div>
+    <div class="nav-zone left" role="button" aria-label="Navigate to previous menu item"></div>
     <div class="cube-track" id="cube-track"></div>
-    <div class="nav-zone right"></div>
+    <div class="nav-zone right" role="button" aria-label="Navigate to next menu item"></div>
   </div>
 
   <script>
@@ -326,7 +340,6 @@
     let currentIndex = 2;
     let isAnimating = false;
     let hoverTimeout;
-    let particlesInterval;
 
     // Initialize
     createStars();
@@ -352,18 +365,19 @@
     function renderCubes() {
       track.innerHTML = '';
       
-      // Create visible cubes (-2 to +2 from center)
       for (let i = -2; i <= 2; i++) {
         const dataIndex = currentIndex + i;
         if (dataIndex < 0 || dataIndex >= menuData.length) continue;
         
         const wrapper = document.createElement('div');
         wrapper.className = `cube-wrapper ${getPositionClass(i)}`;
+        wrapper.setAttribute('role', i === 0 ? 'button' : 'presentation');
+        wrapper.setAttribute('aria-label', i === 0 ? `Current menu item: ${menuData[dataIndex].label}` : '');
+        if (i === 0) wrapper.tabIndex = 0;
         
         const cube = document.createElement('div');
         cube.className = 'cube';
         
-        // Create all 6 faces of the cube
         ['front', 'back', 'right', 'left', 'top', 'bottom'].forEach(face => {
           const faceEl = document.createElement('div');
           faceEl.className = `cube-face ${face}`;
@@ -380,13 +394,12 @@
         track.appendChild(wrapper);
       }
       
-      // Create golden particles around center cube
       createCenterParticles();
     }
     
     function getPositionClass(offset) {
       if (offset === 0) return 'center';
-      return offset < 0 ? `left-${Math.abs(offset)}` : `right-${offset}`;
+      return offset < 0 ? `z-minus-${Math.abs(offset)}` : `z-plus-${offset}`;
     }
     
     // Navigation setup
@@ -394,14 +407,14 @@
       const leftZone = document.querySelector('.nav-zone.left');
       const rightZone = document.querySelector('.nav-zone.right');
       
-      // Mouse hover navigation
       leftZone.addEventListener('mouseenter', () => startHover(-1));
       rightZone.addEventListener('mouseenter', () => startHover(1));
-      
       leftZone.addEventListener('mouseleave', stopHover);
       rightZone.addEventListener('mouseleave', stopHover);
       
-      // Touch navigation
+      leftZone.addEventListener('click', () => navigate(-1));
+      rightZone.addEventListener('click', () => navigate(1));
+      
       let touchStartX = 0;
       
       track.addEventListener('touchstart', (e) => {
@@ -411,17 +424,22 @@
       track.addEventListener('touchmove', (e) => {
         const touchX = e.touches[0].clientX;
         const diff = touchStartX - touchX;
-        
-        if (Math.abs(diff) > 50) {
+        const threshold = window.innerWidth * 0.1;
+        if (Math.abs(diff) > threshold) {
           navigate(diff > 0 ? 1 : -1);
           touchStartX = touchX;
         }
       });
       
-      // Keyboard navigation
       document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft') navigate(-1);
         if (e.key === 'ArrowRight') navigate(1);
+      });
+      
+      track.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.target.classList.contains('cube-wrapper')) {
+          console.log(`Selected: ${e.target.querySelector('.cube-label').textContent}`);
+        }
       });
     }
     
@@ -429,7 +447,7 @@
       clearTimeout(hoverTimeout);
       hoverTimeout = setTimeout(() => {
         navigate(direction);
-        startHover(direction); // Continue navigating while hovered
+        startHover(direction);
       }, 500);
     }
     
@@ -439,34 +457,28 @@
     
     function navigate(direction) {
       if (isAnimating) return;
-      
       const newIndex = currentIndex + direction;
       if (newIndex < 0 || newIndex >= menuData.length) return;
       
       isAnimating = true;
       currentIndex = newIndex;
       
-      // Animate track
-      track.style.transform = `translate(calc(-50% + ${direction * 60}px), -50%)`;
-      track.style.opacity = '0.8';
+      track.classList.add('navigating');
+      track.style.transform = `translate(-50%, -50%) translateZ(${direction * 400}px)`;
       
       setTimeout(() => {
-        track.style.transition = 'none';
-        track.style.transform = 'translate(-50%, -50%)';
-        track.style.opacity = '1';
-        
-        // Force reflow
-        void track.offsetWidth;
-        
-        track.style.transition = 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
+        track.classList.remove('navigating');
+        track.style.transform = 'translate(-50%, -50%) translateZ(0)';
         renderCubes();
         isAnimating = false;
+        document.querySelector('.cube-wrapper.center')?.focus();
       }, 800);
     }
     
     // Particle Effects
     function startParticles() {
-      particlesInterval = setInterval(createRandomParticles, 2000);
+      requestAnimationFrame(createRandomParticles);
+      setInterval(() => requestAnimationFrame(createRandomParticles), 2000);
     }
     
     function createRandomParticles() {
@@ -494,28 +506,20 @@
     }
     
     function createParticle(x, y) {
+      if (document.querySelectorAll('.particle').length > 50) return;
       const particle = document.createElement('div');
       particle.className = 'particle';
-      
-      // Random size and position
       const size = Math.random() * 8 + 4;
       particle.style.width = `${size}px`;
       particle.style.height = `${size}px`;
       particle.style.left = `${x}px`;
       particle.style.top = `${y}px`;
-      
-      // Random movement
       const angle = Math.random() * Math.PI * 2;
       const distance = Math.random() * 100 + 50;
       particle.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
       particle.style.setProperty('--ty', `${Math.sin(angle) * distance - 50}px`);
-      
       document.body.appendChild(particle);
-      
-      // Remove after animation
-      setTimeout(() => {
-        particle.remove();
-      }, 3000);
+      setTimeout(() => particle.remove(), 3000);
     }
   </script>
 </body>
